@@ -1,9 +1,12 @@
 import os
 
+rule all:
+    input:
+     expand(config["output_path"]+ "/classified/kraken_output/{barcode}.kraken", barcode=config["barcodes"])
 
 rule bin_files:
     input:
-        fastq = os.path.join(config["input_path"], "{barcode}", f"fastq_runid_{config['run_id']}_0.fastq")
+        fastq = os.path.join(config["input_path"], "{barcode}", f"fastq_runid_{config['runid']}_0.fastq")
     params:
         file_path = os.path.join(config["input_path"], "{barcode}")
     output:
