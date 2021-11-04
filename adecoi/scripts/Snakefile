@@ -43,11 +43,21 @@ rule kraken_classify:
             --classified-out {output.classified_out} \
             --memory-mapping \
             {input.binned} \
-            > {output.kraken};
+            > {output.kraken}
+        """
+
+rule make_krona:
+    input:
+        kraken=os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken")
+    output:
+        krona=os.path.join(config["output_path"],"classified","krona_output","{barcode}.html")
+    log: os.path.join(config["output_path"],"classified","krona_output","{barcode}.log")
+    shell:
+        """
         ktImportTaxonomy \
-            -q 2 -t 3 {output.kraken} \
-            -o {params.classified}/all_krona.html \
-            &> {params.classified}/krona.log
+            -q 2 -t 3 {input.kraken} \
+            -o {output.krona} \
+            &> {log} 
         """
 
 rule filter_by_length:
