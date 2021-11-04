@@ -55,7 +55,7 @@ rule filter_by_length:
     input:
         os.path.join(config["output_path"],"binned","{barcode}.fastq")
     output:
-        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq")
+        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq"),
         histogram1 = os.path.join(config["output_path"],"figures","{barcode}.unfiltered.svg"),
         histogram2 = os.path.join(config["output_path"],"figures","{barcode}.length_filtered.svg")
     run:
