@@ -124,12 +124,14 @@ rule get_taxa_reads:
     input:
         report = os.path.join(config["output_path"],"{barcode}","classified","kraken_report.filtered.kreport2"),
         classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.filtered.fastq")
+    params:
+        barcode = "{barcode}"
     output:
         report = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"),
         yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
     run:
         taxa_dict = kraken_parsing.parse_report_for_taxa(input.report,200,output.report)
-        gathered_taxa_read_path = os.path.join(config["output_path"],"{barcode}","taxa_read_files")
+        gathered_taxa_read_path = os.path.join(config["output_path"],f"{params.barcode}","taxa_read_files")
         if not os.path.exists(gathered_taxa_read_path):
             os.mkdir(gathered_taxa_read_path)
         
