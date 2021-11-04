@@ -1,6 +1,8 @@
-kraken_db: minikraken_20141208
+kraken_db: /localdisk/home/s1680070/seawater_wimp/kraken_data/minikraken_20141208/
 input_path: /localdisk/data/ADE3/20211007_1242_MN29515_FAR18190_0e9e0951/single_demuxed/
 output_path: /localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/
+min_lenth: 500
+max_length: 1000
 runid: e0470823e34101af262fbf236d1629122ea8e9f0
 barcodes: 
 - barcode01

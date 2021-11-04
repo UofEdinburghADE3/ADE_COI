@@ -1,8 +1,12 @@
 import os
+from Bio import SeqIO
+from adecoi.utils import histograms
 
 rule all:
     input:
-     expand(config["output_path"]+ "/classified/kraken_output/{barcode}.kraken", barcode=config["barcodes"])
+        expand(os.path.join(config["output_path"],"/classified/kraken_output/{barcode}.kraken"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"filtered","{barcode}.fastq"), barcode=config["barcodes"])
+
 
 rule bin_files:
     input:
@@ -44,3 +48,26 @@ rule kraken_classify:
             -o {params.classified}/all_krona.html \
             &> {params.classified}/krona.log
         """
+
+rule filter_by_length:
+    input:
+        os.path.join(config["output_path"],"binned","{barcode}.fastq")
+    output:
+        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq"),
+        histogram1 = os.path.join(config["output_path"],"figures","{barcode}.unfiltered.svg"),
+        histogram2 = os.path.join(config["output_path"],"figures","{barcode}.length_filtered.svg")
+    run:
+        fastq_records = []
+        lengths = []
+        filtered_lengths = []
+        with open(output.reads,"w") as fw:
+            for record in SeqIO.parse(input[0],"fastq"):
+                length = len(record)
+                lengths.append(length)
+                if length > int(config["min_length"]) and length < int(config["max_length"]):
+                    fastq_records.append(record)
+                    filtered_lengths.append(length)
+            SeqIO.write(fastq_records,fw, "fastq")
+        histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
+        histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
+
