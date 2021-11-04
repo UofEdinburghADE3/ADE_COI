@@ -1,5 +1,6 @@
 from Bio import SeqIO
 import collections
+import os
 
 def parse_report_for_taxa(report,min_reads,out_taxa):
     taxa_dict = {}
