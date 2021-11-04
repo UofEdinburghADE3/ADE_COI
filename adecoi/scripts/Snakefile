@@ -70,6 +70,6 @@ rule filter_by_length:
                     fastq_records.append(record)
                     filtered_lengths.append(length)
             SeqIO.write(fastq_records,fw, "fastq")
-        histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
-        histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
+        # histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
+        # histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
 
