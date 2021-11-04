@@ -2,7 +2,7 @@ import os
 from Bio import SeqIO
 from adecoi.utils import histograms
 from adecoi.utils import kraken_parsing
-
+import yaml
 print(config)
 
 rule all:
