@@ -55,7 +55,7 @@ rule filter_by_length:
     input:
         os.path.join(config["output_path"],"binned","{barcode}.fastq")
     output:
-        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq"),
+        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq")
         histogram1 = os.path.join(config["output_path"],"figures","{barcode}.unfiltered.svg"),
         histogram2 = os.path.join(config["output_path"],"figures","{barcode}.length_filtered.svg")
     run:
@@ -70,6 +70,6 @@ rule filter_by_length:
                     fastq_records.append(record)
                     filtered_lengths.append(length)
             SeqIO.write(fastq_records,fw, "fastq")
-        # histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
-        # histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
+        histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
+        histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
 

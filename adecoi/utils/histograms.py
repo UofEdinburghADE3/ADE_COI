@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-import seaborn as sns
 
 
 def make_read_length_histogram_svg(read_lengths,min_len,max_len,outfile):
@@ -19,7 +18,7 @@ def make_read_length_histogram_svg(read_lengths,min_len,max_len,outfile):
 
     fig,ax= plt.subplots(figsize=(15,5),facecolor='w',frameon=False)
     [ax.spines[loc].set_visible(False) for loc in ['top','right']]
-    sns.histplot(data=read_lengths, x="Read length",bins=50)
+    plt.hist(read_lengths, bins=50)
     plt.axvline(x=min_len, color='dimgrey', linestyle='--')
     plt.axvline(x=max_len, color='dimgrey', linestyle='--')
 
