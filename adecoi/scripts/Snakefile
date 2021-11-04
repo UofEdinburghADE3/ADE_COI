@@ -1,15 +1,15 @@
 import os
 from Bio import SeqIO
 from adecoi.utils import histograms
+from adecoi.utils import kraken_parsing
 
 print(config)
 
 rule all:
     input:
-        expand(os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"), barcode=config["barcodes"]),
-        expand(os.path.join(config["output_path"],"filtered","{barcode}.fastq"), barcode=config["barcodes"]),
-        expand(os.path.join(config["output_path"],"classified","krona_output","{barcode}.html"), barcode=config["barcodes"])
-
+        expand(os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"), barcode=config["barcodes"])
 
 rule bin_files:
     input:
@@ -17,7 +17,7 @@ rule bin_files:
     params:
         file_path = os.path.join(config["input_path"], "{barcode}")
     output:
-        binned = os.path.join(config["output_path"],"binned","{barcode}.fastq")
+        binned = os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq")
     shell:
         """
         cat {params.file_path}/fastq_*.fastq > {output[0]}
@@ -26,15 +26,15 @@ rule bin_files:
 rule kraken_classify:
     input:
         db=config["kraken_db"],
-        binned=os.path.join(config["output_path"],"binned","{barcode}.fastq"),
+        binned=os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq"),
         taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
     output:
-        kraken=os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"),
-        classified_out = os.path.join(config["output_path"],"classified","reads","{barcode}.fastq"),
-        report = os.path.join(config["output_path"],"classified","reads","{barcode}.kreport2")
+        kraken=os.path.join(config["output_path"],"{barcode}","classified","unfiltered.kraken"),
+        classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.unfiltered.fastq"),
+        report = os.path.join(config["output_path"],"{barcode}","classified","kraken_report.unfiltered.kreport2")
     params:
         barcode="{barcode}",
-        classified=os.path.join(config["output_path"],"classified")
+        classified=os.path.join(config["output_path"],"{barcode}","classified")
     threads:
         2
     shell:
@@ -49,10 +49,10 @@ rule kraken_classify:
 
 rule make_krona:
     input:
-        kraken=os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken")
+        kraken=os.path.join(config["output_path"],"{barcode}","classified","unfiltered.kraken")
     output:
-        krona=os.path.join(config["output_path"],"classified","krona_output","{barcode}.html")
-    log: os.path.join(config["output_path"],"classified","krona_output","{barcode}.log")
+        krona=os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html")
+    log: os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.log")
     shell:
         """
         ktImportTaxonomy \
@@ -63,11 +63,11 @@ rule make_krona:
 
 rule filter_by_length:
     input:
-        os.path.join(config["output_path"],"binned","{barcode}.fastq")
+        os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq")
     output:
-        reads = os.path.join(config["output_path"],"filtered","{barcode}.fastq"),
-        histogram1 = os.path.join(config["output_path"],"figures","{barcode}.unfiltered.svg"),
-        histogram2 = os.path.join(config["output_path"],"figures","{barcode}.length_filtered.svg")
+        reads = os.path.join(config["output_path"],"{barcode}","read_length_filtered","filtered_reads.fastq"),
+        histogram1 = os.path.join(config["output_path"],"{barcode}","figures","unfiltered_reads_histogram.svg"),
+        histogram2 = os.path.join(config["output_path"],"{barcode}","figures","length_filtered_reads_histogram.svg")
     run:
         fastq_records = []
         lengths = []
@@ -82,4 +82,76 @@ rule filter_by_length:
             SeqIO.write(fastq_records,fw, "fastq")
         histograms.make_read_length_histogram_svg(lengths,config["min_length"],config["max_length"], output.histogram1)
         histograms.make_read_length_histogram_svg(filtered_lengths,config["min_length"],config["max_length"], output.histogram2)
+
+rule kraken_classify_filtered:
+    input:
+        db=config["kraken_db"],
+        binned=os.path.join(config["output_path"],"{barcode}","read_length_filtered","filtered_reads.fastq"),
+        taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
+    output:
+        kraken=os.path.join(config["output_path"],"{barcode}","classified","filtered.kraken"),
+        classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.filtered.fastq"),
+        report = os.path.join(config["output_path"],"{barcode}","classified","kraken_report.filtered.kreport2")
+    params:
+        barcode="{barcode}",
+    threads:
+        2
+    shell:
+        """
+        kraken2 --db {input.db} \
+            --report {output.report} \
+            --classified-out {output.classified_out} \
+            --memory-mapping \
+            {input.binned} \
+            > {output.kraken}
+        """
+
+rule make_krona_filtered:
+    input:
+        kraken=os.path.join(config["output_path"],"{barcode}","classified","filtered.kraken")
+    output:
+        krona=os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html")
+    log: os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.log")
+    shell:
+        """
+        ktImportTaxonomy \
+            -q 2 -t 3 {input.kraken} \
+            -o {output.krona} \
+            &> {log} 
+        """
+
+rule get_taxa_reads:
+    input:
+        report = os.path.join(config["output_path"],"{barcode}","classified","kraken_report.filtered.kreport2"),
+        classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.filtered.fastq")
+    output:
+        report = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"),
+        yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
+    run:
+        taxa_dict = kraken_parsing.parse_report_for_taxa(input.report,200,output.report)
+        gathered_taxa_read_path = os.path.join(config["output_path"],"{barcode}","taxa_read_files")
+        if not os.path.exists(gathered_taxa_read_path):
+            os.mkdir(gathered_taxa_read_path)
+        
+        taxa = kraken_parsing.get_reads(taxa_dict,input.classified_out,gathered_taxa_read_path)
+        config["taxa"] = taxa
+
+        with open(output.yaml, 'w') as fw:
+            yaml.dump(config, fw) 
+
+rule get_consensus_sequences:
+    input:
+        snakefile = os.path.join(workflow.current_basedir,"cns_runner.smk"),
+        taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.found_reads.csv"),
+        yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
+    output:
+        taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt")
+    run:
+        shell("snakemake --nolock --snakefile {input.snakefile:q} "
+                    "--forceall "
+                    "{config[log_string]} "
+                    "--directory {config[tempdir]:q} "
+                    "--configfile {input.yaml:q} "
+                    "--config fasta={input.fasta:q} csv={input.csv:q} "
+                    "--cores {workflow.cores} &> {log:q}")
 

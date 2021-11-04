@@ -16,7 +16,9 @@ setup(name='adecoi',
       package_data={"adecoi":["data/*"]},
       install_requires=[
             "biopython>=1.70",
-            "mako>=1.1"
+            "mako>=1.1",
+            "matplotlib",
+            "seaborn"
         ],
       description='ADE COI',
       url='https://github.com/aineniamh/adecoi',
