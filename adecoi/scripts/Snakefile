@@ -4,7 +4,7 @@ from adecoi.utils import histograms
 
 rule all:
     input:
-        expand(os.path.join(config["output_path"],"/classified/kraken_output/{barcode}.kraken"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"), barcode=config["barcodes"]),
         expand(os.path.join(config["output_path"],"filtered","{barcode}.fastq"), barcode=config["barcodes"])
 
 
@@ -26,7 +26,7 @@ rule kraken_classify:
         binned=os.path.join(config["output_path"],"binned","{barcode}.fastq"),
         taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
     output:
-        kraken=config["output_path"] + "/classified/kraken_output/{barcode}.kraken",
+        kraken=os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"),
     params:
         barcode="{barcode}",
         outdir=config["output_path"] + "/classified/kraken_reports/{barcode}",
