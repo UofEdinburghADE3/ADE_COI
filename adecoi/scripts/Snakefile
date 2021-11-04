@@ -7,7 +7,8 @@ print(config)
 rule all:
     input:
         expand(os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"), barcode=config["barcodes"]),
-        expand(os.path.join(config["output_path"],"filtered","{barcode}.fastq"), barcode=config["barcodes"])
+        expand(os.path.join(config["output_path"],"filtered","{barcode}.fastq"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"classified","krona_output","{barcode}.html"), barcode=config["barcodes"])
 
 
 rule bin_files:
