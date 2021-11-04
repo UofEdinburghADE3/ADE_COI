@@ -29,24 +29,23 @@ rule kraken_classify:
         taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
     output:
         kraken=os.path.join(config["output_path"],"classified","kraken_output","{barcode}.kraken"),
+        classified_out = os.path.join(config["output_path"],"classified","reads","{barcode}.fastq"),
+        report = os.path.join(config["output_path"],"classified","reads","{barcode}.kreport2")
     params:
         barcode="{barcode}",
-        outdir=config["output_path"] + "/classified/kraken_reports/{barcode}",
-        classified=config["output_path"] + "/classified"
+        classified=os.path.join(config["output_path"],"classified")
     threads:
         2
     shell:
         """
-        mkdir -p {params.outdir}
         kraken2 --db {input.db} \
-            --report {params.outdir}/{params.barcode}.kreport2 \
-            --classified-out {params.outdir}/{params.barcode}.fastq \
+            --report {output.report} \
+            --classified-out {output.classified_out} \
             --memory-mapping \
             {input.binned} \
             > {output.kraken};
-        cat {output.kraken} >> {params.outdir}/{params.barcode}.kraken;
         ktImportTaxonomy \
-            -q 2 -t 3 {params.classified}/*/*.kraken \
+            -q 2 -t 3 {output.kraken} \
             -o {params.classified}/all_krona.html \
             &> {params.classified}/krona.log
         """
