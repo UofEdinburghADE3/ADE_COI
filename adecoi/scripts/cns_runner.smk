@@ -130,6 +130,7 @@ rule medaka:
         paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.racon4.paf")
     params:
         outdir=os.path.join(config["outdir"],"{taxid}","medaka"),
+        cns_mod = os.path.join(config["outdir"],"{taxid}","racon","racon4.mod.fasta")
     output:
         consensus= os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta")
     threads:
@@ -137,8 +138,10 @@ rule medaka:
     shell:
         """
         if [ -s {input.paf} ]
+        
         then
-            medaka_consensus -i {input.basecalls} -d {input.draft} -o {params.outdir} -t 2
+            sed "s/[:,-]/_/g" {input.draft} > {params.cns_mod}
+            medaka_consensus -i {input.basecalls} -d {params.cns_mod} -o {params.outdir} -t 2
         else
             touch {output.consensus}
         fi
