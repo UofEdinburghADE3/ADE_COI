@@ -154,12 +154,12 @@ rule get_consensus_sequences:
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.found_reads.csv"),
         yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
     params:
-        barcode = "{barcode}"
+        barcode = "{barcode}",
         outdir = os.path.join(config["output_path"],"{barcode}","processed_taxa")
     output:
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt")
     run:
-        print(green("Running consensus pipeline."))
+        print("Running consensus pipeline.")
         shell("snakemake --nolock --snakefile {input.snakefile:q} "
                     "--forceall "
                     "--configfile {input.yaml:q} "
