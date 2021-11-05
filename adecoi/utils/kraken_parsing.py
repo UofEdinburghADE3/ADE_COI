@@ -52,9 +52,12 @@ def extract_taxid_ref(taxids,map_file,background_file,output_path):
     record_id_to_tax_id = get_seq_id_to_tax_map(map_file)
 
     for record in SeqIO.parse(background_file, "fasta"):
-        record_taxid = record_id_to_tax_id[record.id]
-        if record_taxid in taxids:
-            records[record_taxid]= record
+        try:
+            record_taxid = record_id_to_tax_id[record.id]
+            if record_taxid in taxids:
+                records[record_taxid]= record
+        except:
+            pass
     valid_taxa = []
     with open(os.path.join(output_path,f"not_animalia.found.txt"),"w") as fw:
         fw.write("taxid\n")
