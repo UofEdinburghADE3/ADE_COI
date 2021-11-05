@@ -22,7 +22,7 @@ rule minimap2_racon0:
 rule racon1:
     input:
         reads=os.path.join(config["read_path"],"{taxid}.fastq"),
-        ref=os.path.join(config["reference_path"],"{taxid}.fasta"),
+        fasta=os.path.join(config["reference_path"],"{taxid}.fasta"),
         paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.ref.paf")
     output:
         os.path.join(config["outdir"],"{taxid}","racon","racon1.fasta")
