@@ -611,7 +611,7 @@
               </div>
 
               <% col_no=0 %>
-              %for col in config["query_table_content"]:
+              %for col in data_for_report["table_columns"]:
                 
                 <div class="col-sm-1">
                   <a class="toggle-vis" data-column="${col_no}" style="color:${themeColor}">${col.title().replace("_"," ")}</a> 
@@ -628,20 +628,16 @@
           <table class="display nowrap" id="myTable">
             <thead>
               <tr>
-              %for col in config["query_table_content"]:
+              %for col in config["table_columns"]:
               <th style="width:10%;">${col.title().replace("_"," ")}</th>
               %endfor
               </tr>
             </thead>
             <tbody>
-              % for row in query_summary_data:
+              % for row in data_for_report["taxa_table"]:
                   <tr>
-                    %for col in config["query_table_content"]:
-                      %if col=="catchment":
-                      <td><a href="#header_${row[col]}" style="color:${themeColor}">${row[col]}</a></td>
-                      %else:
+                    %for col in config["table_columns"]:
                       <td>${row[col]}</td>
-                      %endif
                     %endfor
                   </tr>
               % endfor
@@ -670,44 +666,6 @@
     
                 } );
             </script>
-        %endif
-        %if 'query_fasta' in config:
-    
-          <h3><strong>Table 2 </strong> | Queries provided in fasta file</h3>
-          <button class="accordion">Passed QC</button>
-          <div class="panel">
-            <table class="table table-striped" id="myTable2">
-            <tr class="header">
-                %for col in config["fasta_table_content"]:
-                <th style="width:10%;">${col.title().replace("_"," ")}</th>
-                %endfor
-                </tr>
-                % for row in fasta_summary_pass:
-                    <tr>
-                      %for col in config['fasta_table_content']:
-                      <td>${row[col]}</td>
-                      %endfor
-                    </tr>
-                % endfor
-            </table>
-          </div>
-          <button class="accordion">Failed QC</button>
-          <div class="panel">
-          <table class="table table-striped" id="myTable2">
-            <tr class="header">
-                %for col in config["fasta_table_content"]:
-                <th style="width:10%;">${col.title().replace("_"," ")}</th>
-                %endfor
-                </tr>
-                % for row in fasta_summary_fail:
-                    <tr>
-                      %for col in config['fasta_table_content']:
-                      <td>${row[col]}</td>
-                      %endfor
-                    </tr>
-                % endfor
-            </table>
-          </div>
         %endif
 
     <script>

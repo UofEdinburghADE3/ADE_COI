@@ -105,8 +105,10 @@ def data_for_table(input_taxa, data_for_report):
     data_for_report["taxa_table"] = []
     with open(input_taxa, "r") as f:
         reader = csv.DictReader(f)
+        data_for_report["table_columns"] = reader.fieldnames
         for row in reader:
             data_for_report["taxa_table"].append(row)
+    
 
 def make_report(report_to_generate,config,data_for_report,barcode):
     #need to call this multiple times if there are multiple reports wanted
