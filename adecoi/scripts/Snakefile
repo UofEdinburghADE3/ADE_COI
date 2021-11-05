@@ -189,7 +189,10 @@ rule generate_report:
         report.get_read_counts(input.all_reads, input.classified_reads, input.filtered_reads, input.classified_filtered,data_for_report)
         report.load_histograms_svg(input.histogram1, input.histogram2, data_for_report)
 
+        report.data_for_table(input.taxa, data_for_report)
+
         with open(input.yaml, 'r') as f:
             config_loaded = yaml.safe_load(f)
+            
         report.make_report(input.csv,output.html,config_loaded,data_for_report,params.barcode)
 

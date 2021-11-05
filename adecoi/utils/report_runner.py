@@ -100,10 +100,19 @@ def load_histograms_svg(hist1, hist2, data_for_report):
     load_svgfile(hist1, "histogram1", data_for_report)
     load_svgfile(hist2, "histogram2", data_for_report)
 
+def data_for_table(input_taxa, data_for_report):
+    #pcent_reads,sub_reads,reads,rank,taxid,taxon
+    data_for_report["taxa_table"] = []
+    with open(input_taxa, "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            data_for_report["taxa_table"].append(row)
 
 def make_report(report_to_generate,config,data_for_report,barcode):
     #need to call this multiple times if there are multiple reports wanted
     
+    data = json.dumps(data_for_report) 
+    print(data)
     template_dir = os.path.abspath(os.path.dirname(config["report_template"]))
     mylookup = TemplateLookup(directories=[template_dir]) #absolute or relative works
 
@@ -113,7 +122,7 @@ def make_report(report_to_generate,config,data_for_report,barcode):
     ctx = Context(buf, 
                     date = date.today(), 
                     barcode = barcode,
-                    data_for_report = data_for_report,
+                    data_for_report = data,
                     config=config)
 
     try:
