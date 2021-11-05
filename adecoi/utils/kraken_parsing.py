@@ -2,6 +2,8 @@ from Bio import SeqIO
 import collections
 import os
 
+
+
 def parse_report_for_taxa(report,min_reads,out_taxa):
     taxa_dict = {}
     with open(out_taxa,"w") as fw:
@@ -35,11 +37,22 @@ def get_reads(taxa_dict,read_file,output_path):
                 SeqIO.write(taxa_read_dict[taxon],fw,"fastq")
     return taxa
 
-def extract_taxid_ref(taxids,background_file,output_path):
+def get_seq_id_to_tax_map(map_file):
+    record_id_to_tax_id = {}
+    with open(map_file,"r") as f:
+        for l in f:
+            l = l.rstrip()
+            record,taxid = l.split()
+            record_id_to_tax_id[record] = taxid
+    return record_id_to_tax_id
+
+def extract_taxid_ref(taxids,map_file,background_file,output_path):
     records = {}
+
+    record_id_to_tax_id = get_seq_id_to_tax_map(map_file)
+
     for record in SeqIO.parse(background_file, "fasta"):
-        #5970270|Insecta-Diptera-Chironomidae-||KT605684|kraken:taxid|1721978|gi|930166331
-        record_taxid = record.id.split("|")[5]
+        record_taxid = record_id_to_tax_id[record.id]
         if record_taxid in taxids:
             records[record_taxid]= record
     valid_taxa = []
