@@ -11,7 +11,8 @@ setup(name='adecoi',
       version=__version__,
       packages=find_packages(),
       scripts=[
-            "adecoi/scripts/Snakefile"
+            "adecoi/scripts/Snakefile",
+            "adecoi/scripts/cns_runner.smk"
             ],
       package_data={"adecoi":["data/*"]},
       install_requires=[
