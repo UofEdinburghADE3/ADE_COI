@@ -41,7 +41,7 @@ def extract_taxid_ref(taxids,background_file,output_path):
         #5970270|Insecta-Diptera-Chironomidae-||KT605684|kraken:taxid|1721978|gi|930166331
         record_taxid = record.id.split("|")[5]
         if record_taxid in taxids:
-            records[taxid]= record
+            records[record_taxid]= record
     print(f"Number of records found for taxid {taxid}: {len(records)}")
     for taxid in records:
         with open(os.path.join(output_path,f"{taxid}.fasta"),"w") as fw:
