@@ -42,7 +42,7 @@ def extract_taxid_ref(taxids,background_file,output_path):
         record_taxid = record.id.split("|")[5]
         if record_taxid in taxids:
             records[record_taxid]= record
-    print(f"Number of records found for taxid {taxid}: {len(records)}")
+    print(f"Number of records found for taxid {record_taxid}: {len(records)}")
     for taxid in records:
         with open(os.path.join(output_path,f"{taxid}.fasta"),"w") as fw:
             record = records[taxid]
