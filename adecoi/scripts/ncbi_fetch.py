@@ -8,7 +8,7 @@ record = Entrez.read(handle)
 count = int(record["Count"])
 handle.close()
 id_list = record["IdList"]
-print(len(id_list))
+print(len(id_list), count)
 search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
 
 webenv = search_results["WebEnv"]

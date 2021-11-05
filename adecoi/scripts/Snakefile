@@ -9,8 +9,8 @@ rule all:
     input:
         expand(os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html"), barcode=config["barcodes"]),
         expand(os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html"), barcode=config["barcodes"]),
-        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"), barcode=config["barcodes"])
-
+        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt"), barcode=config["barcodes"])
 rule bin_files:
     input:
         fastq = os.path.join(config["input_path"], "{barcode}", f"fastq_runid_{config['runid']}_0.fastq")
@@ -134,9 +134,16 @@ rule get_taxa_reads:
         gathered_taxa_read_path = os.path.join(config["output_path"],f"{params.barcode}","taxa_read_files")
         if not os.path.exists(gathered_taxa_read_path):
             os.mkdir(gathered_taxa_read_path)
-        
+        reference_path = os.path.join(config["output_path"],f"{params.barcode}","references")
+        if not os.path.exists(reference_path):
+            os.mkdir(reference_path)
+        config["reference_path"] = reference_path
+        config["read_path"] = gathered_taxa_read_path
         taxa = kraken_parsing.get_reads(taxa_dict,input.classified_out,gathered_taxa_read_path)
         config["taxa"] = taxa
+        database = os.path.join(config["kraken_db"],"library/added/XUmdeedMPS.fna")
+
+        extract_taxid_ref(taxa,database,reference_path)
 
         with open(output.yaml, 'w') as fw:
             yaml.dump(config, fw) 
@@ -146,14 +153,16 @@ rule get_consensus_sequences:
         snakefile = os.path.join(workflow.current_basedir,"cns_runner.smk"),
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.found_reads.csv"),
         yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
+    params:
+        barcode = "{barcode}"
+        outdir = os.path.join(config["output_path"],"{barcode}","processed_taxa")
     output:
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt")
     run:
+        print(green("Running consensus pipeline."))
         shell("snakemake --nolock --snakefile {input.snakefile:q} "
                     "--forceall "
-                    "{config[log_string]} "
-                    "--directory {config[tempdir]:q} "
                     "--configfile {input.yaml:q} "
-                    "--config fasta={input.fasta:q} csv={input.csv:q} "
-                    "--cores {workflow.cores} &> {log:q}")
+                    "--config barcode={params.barcode} outdir={params.outdir:q} "
+                    "--cores {workflow.cores} && touch {output.taxa}")
 

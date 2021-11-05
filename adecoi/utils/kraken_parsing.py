@@ -31,8 +31,27 @@ def get_reads(taxa_dict,read_file,output_path):
         print(f"Found {reads_found} reads in classified file, from reported {taxa_dict[taxon]} reads.")
         if reads_found:
             taxa.append(taxon)
-            with open(os.path.join(output_path,taxon),"w") as fw:
+            with open(os.path.join(output_path,f"{taxon}.fastq"),"w") as fw:
                 SeqIO.write(taxa_read_dict[taxon],fw,"fastq")
     return taxa
+
+def extract_taxid_ref(taxids,background_file,output_path):
+    records = {}
+    for record in SeqIO.parse(background_file, "fasta"):
+        #5970270|Insecta-Diptera-Chironomidae-||KT605684|kraken:taxid|1721978|gi|930166331
+        record_taxid = record.id.split("|")[5]
+        if record_taxid in taxids:
+            records[taxid]= record
+    print(f"Number of records found for taxid {taxid}: {len(records)}")
+    for taxid in records:
+        with open(os.path.join(output_path,f"{taxid}.fasta","w") as fw:
+            record = records[taxid]
+            fw.write(f">{record.id}\n{record.seq}\n")
+
+
+
+
+
+
 
 

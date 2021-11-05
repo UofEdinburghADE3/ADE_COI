@@ -1,23 +1,31 @@
+import os
+
+barcode = config["barcode"]
+
+rule all:
+    input:
+        expand(os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta"), taxid=config["taxa"]),
+        expand(os.path.join(config["outdir"],"consensus_sequences","{taxid}.fasta"), taxid=config["taxa"])
+
 rule minimap2_racon0:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        ref=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/ref.fasta",
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["reference_path"],"{taxid}.fasta"),
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.ref.paf"
+        os.path.join(config["outdir"],"{taxid}","racon","mapped.ref.paf")
     shell:
         """
-        sed -i 's/kraken:taxid/kraken_taxid/g' {input.ref}
-        minimap2 -n 1 -m 1 -M 1 {input.ref} {input.reads} > {output}
+        minimap2 -x map-ont {input.ref} {input.reads} > {output}
         """
 
 
 rule racon1:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        fasta=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/ref.fasta",
-        paf= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.ref.paf"
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["reference_path"],"{taxid}.fasta"),
+        paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.ref.paf")
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon1.fasta"
+        os.path.join(config["outdir"],"{taxid}","racon","racon1.fasta")
     shell:
         """
         if [ -s {input.paf} ]
@@ -30,20 +38,20 @@ rule racon1:
 
 rule minimap2_racon1:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        ref=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon1.fasta",
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["outdir"],"{taxid}","racon","racon1.fasta"),
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon1.paf"
+        os.path.join(config["outdir"],"{taxid}","racon","mapped.racon1.paf")
     shell:
         "minimap2 -n 1 -m 1 -M 1 {input.ref} {input.reads} > {output}"
 
 rule racon2:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        fasta=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon1.fasta",
-        paf= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon1.paf"
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        fasta=os.path.join(config["outdir"],"{taxid}","racon","racon1.fasta"),
+        paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.racon1.paf")
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon2.fasta"
+        os.path.join(config["outdir"],"{taxid}","racon","racon2.fasta")
     shell:
         """
         if [ -s {input.paf} ]
@@ -56,20 +64,20 @@ rule racon2:
 
 rule minimap2_racon2:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        ref=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon2.fasta",
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["outdir"],"{taxid}","racon","racon2.fasta")
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon2.paf"
+        os.path.join(config["outdir"],"{taxid}","racon","mapped.racon2.paf")
     shell:
         "minimap2 -n 1 -m 1 {input.ref} {input.reads} > {output}"
 
 rule racon3:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        fasta=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon2.fasta",
-        paf= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon2.paf"
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        fasta=os.path.join(config["outdir"],"{taxid}","racon","racon2.fasta"),
+        paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.racon2.paf")
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon3.fasta"
+        os.path.join(config["outdir"],"{taxid}","racon","racon3.fasta")
     shell:
         """
         if [ -s {input.paf} ]
@@ -82,20 +90,20 @@ rule racon3:
 
 rule minimap2_racon3:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        ref=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon3.fasta",
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["outdir"],"{taxid}","racon","racon3.fasta"),
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon3.paf"
+        os.path.join(config["outdir"],"{taxid}","racon","mapped.racon3.paf")
     shell:
         "minimap2 -n 1 -m 1 {input.ref} {input.reads} > {output}"
 
 rule racon4:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        fasta=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon3.fasta",
-        paf= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon3.paf"
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        fasta=os.path.join(config["outdir"],"{taxid}","racon","racon3.fasta"),
+        paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.racon3.paf")
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon4.fasta"
+        os.path.join(config["outdir"],"{taxid}","racon","racon4.fasta")
     shell:
         """
         if [ -s {input.paf} ]
@@ -108,22 +116,22 @@ rule racon4:
 
 rule minimap2_racon4:
     input:
-        reads=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        ref=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon4.fasta",
+        reads=os.path.join(config["read_path"],"{taxid}.fastq"),
+        ref=os.path.join(config["outdir"],"{taxid}","racon","racon4.fasta"),
     output:
-        config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon4.paf"
+        os.path.join(config["outdir"],"{taxid}","racon","mapped.racon4.paf")
     shell:
         "minimap2 -n 1 -m 1 {input.ref} {input.reads} > {output}"
 
 rule medaka:
     input:
-        basecalls=config["output_path"] + "binned/barcode_{barcode}/{taxon}_{taxid}.fastq",
-        draft=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/racon4.fasta",
-        paf= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/mapped.racon4.paf"
+        basecalls=os.path.join(config["read_path"],"{taxid}.fastq"),
+        draft=os.path.join(config["outdir"],"{taxid}","racon","racon4.fasta"),
+        paf= os.path.join(config["outdir"],"{taxid}","racon","mapped.racon4.paf")
     params:
-        outdir=config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/medaka",
+        outdir=os.path.join(config["outdir"],"{taxid}","medaka"),
     output:
-        consensus= config["output_path"] + "assembled/barcode_{barcode}/{taxon}_{taxid}/medaka/consensus.fasta"
+        consensus= os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta")
     threads:
         2
     shell:
@@ -135,4 +143,13 @@ rule medaka:
             touch {output.consensus}
         fi
         """
-        
+
+rule gather:
+    input:
+        os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta")
+    output:
+        os.path.join(config["outdir"],"consensus_sequences","{taxid}.fasta")
+    shell:
+        """
+        cp {input[0]} {output[0]} 
+        """
