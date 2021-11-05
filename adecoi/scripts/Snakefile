@@ -195,5 +195,5 @@ rule generate_report:
         with open(input.yaml, 'r') as f:
             config_loaded = yaml.safe_load(f)
 
-        report.make_report(input.csv,output.html,config_loaded,data_for_report,params.barcode)
+        report.make_report(output.html,config_loaded,data_for_report,params.barcode)
 
