@@ -3,7 +3,7 @@ kraken_fasta: /localdisk/home/s1680070/ADE_analysis/kraken_databases/COI_all.fas
 
 input_path: /localdisk/data/ADE3/20211007_1242_MN29515_FAR18190_0e9e0951/single_demuxed/
 output_path: /localdisk/home/s1680070/ADE_analysis
-report_template: /localdisk/home/s1680070/ADE_analysis/adecoi/data/repoort_template.mako
+report_template: /localdisk/home/s1680070/ADE_analysis/adecoi/data/report_template.mako
 
 min_length: 500
 max_length: 1000
