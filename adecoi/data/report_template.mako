@@ -666,7 +666,6 @@
     
                 } );
             </script>
-        %endif
 
     <script>
         var acc = document.getElementsByClassName("accordion");
