@@ -151,7 +151,7 @@ rule get_taxa_reads:
 rule get_consensus_sequences:
     input:
         snakefile = os.path.join(workflow.current_basedir,"cns_runner.smk"),
-        taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.found_reads.csv"),
+        taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"),
         yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
     params:
         barcode = "{barcode}",
