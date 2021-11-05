@@ -139,10 +139,9 @@ rule get_taxa_reads:
         config["reference_path"] = reference_path
         config["read_path"] = gathered_taxa_read_path
         taxa = kraken_parsing.get_reads(taxa_dict,input.classified_out,gathered_taxa_read_path)
-        config["taxa"] = taxa
         database = os.path.join(config["kraken_db"],"library/added/XUmdeedMPS.fna")
 
-        kraken_parsing.extract_taxid_ref(taxa,database,reference_path)
+        config["taxa"] = kraken_parsing.extract_taxid_ref(taxa,database,reference_path)
 
         with open(output.yaml, 'w') as fw:
             yaml.dump(config, fw) 

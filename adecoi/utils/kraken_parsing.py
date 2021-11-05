@@ -42,11 +42,21 @@ def extract_taxid_ref(taxids,background_file,output_path):
         record_taxid = record.id.split("|")[5]
         if record_taxid in taxids:
             records[record_taxid]= record
+
+    with open(os.path.join(output_path,f"not_animalia.found.txt"),"w") as fw:
+        fw.write("taxid\n")
+        for record_taxid in taxids:
+            if record_taxid not in records:
+                fw.write(f"{record_taxid}\n")
+
     print(f"Number of records found for taxid {record_taxid}: {len(records)}")
     for taxid in records:
         with open(os.path.join(output_path,f"{taxid}.fasta"),"w") as fw:
             record = records[taxid]
             fw.write(f">{record.id}\n{record.seq}\n")
+    
+    return records.keys()
+
 
 
 
