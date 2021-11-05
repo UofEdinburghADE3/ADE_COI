@@ -3,7 +3,6 @@ from Bio import SeqIO
 from adecoi.utils import histograms
 from adecoi.utils import kraken_parsing
 import yaml
-print(config)
 
 rule all:
     input:
@@ -143,7 +142,7 @@ rule get_taxa_reads:
         config["taxa"] = taxa
         database = os.path.join(config["kraken_db"],"library/added/XUmdeedMPS.fna")
 
-        extract_taxid_ref(taxa,database,reference_path)
+        kraken_parsing.extract_taxid_ref(taxa,database,reference_path)
 
         with open(output.yaml, 'w') as fw:
             yaml.dump(config, fw) 
