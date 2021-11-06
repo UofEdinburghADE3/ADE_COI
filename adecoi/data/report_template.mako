@@ -536,10 +536,12 @@
         <h1>ADE3 ${barcode}
             <small class="text-muted" style="color:${themeColor}">${date}</small>
         </h1> 
+        <hr>
         <br>
         </div>
     <br>
-        <h2>All sequencing reads</h2>
+
+        <h2>1. All sequencing reads</h2>
         <p><strong>Read count:</strong> ${data_for_report["total_reads"]} </p>
         <p><strong>Reads classified:</strong> ${data_for_report["total_classified"]} </p>
         <p><strong>Proportion of reads classified:</strong> ${data_for_report["total_prop_classified"]} </p>
@@ -567,9 +569,12 @@
             exportImagePNG("#total_classified_png","#total_classified", "total_classified_chart");
             </script>
             <% figure_count +=1 %>
-                <h3><strong>Figure ${figure_count}</strong> | Read length distribution plot for sequence id ${barcode}</h3>
+                <h3><strong>Figure ${figure_count}</strong> | Read length distribution plot for Sequence ID ${barcode}</h3>
                 <hr>        
-        <h2>Filtered sequencing reads</h2>
+        <h2>2. Classification of unfiltered reads</h2>
+        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
+
+        <h2>3. Filtered sequencing reads</h2>
         <p><strong>Min length:</strong> ${config["min_length"]} </p>
         <p><strong>Max length:</strong> ${config["max_length"]} </p>
         <p><strong>Read count post filtering:</strong> ${data_for_report["filtered_reads"]} </p>
@@ -600,6 +605,11 @@
         <% figure_count +=1 %>
         <h3><strong>Figure ${figure_count}</strong> | Filtered read length distribution plot for sequence id ${barcode}</h3>
                 <hr>  
+        <h2>4. Classification of filtered reads</h2>
+        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
+        
+        <h2>5. Taxa with consensus sequences generated.</h2>
+        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
 
         <h3><strong>Table 1</strong> | Summary of taxa generated </h3>
           <button class="accordion">Table options</button>

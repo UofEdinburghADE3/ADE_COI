@@ -105,7 +105,8 @@ def data_for_table(input_taxa, data_for_report):
     data_for_report["taxa_table"] = []
     with open(input_taxa, "r") as f:
         reader = csv.DictReader(f)
-        data_for_report["table_columns"] = reader.fieldnames
+        #pcent_reads,sub_reads,reads,rank,taxid,taxon
+        data_for_report["table_columns"] = ["taxid","taxon","reads","sub_reads","pcent_reads"]
         for row in reader:
             data_for_report["taxa_table"].append(row)
     

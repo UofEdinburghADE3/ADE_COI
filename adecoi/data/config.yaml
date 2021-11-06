@@ -1,6 +1,9 @@
 kraken_db: /localdisk/home/s1680070/ADE_analysis/kraken_databases/COIBoLD/
 kraken_fasta: /localdisk/home/s1680070/ADE_analysis/kraken_databases/COI_all.fasta
 
+publish_path: /localdisk/data/ADE3/ADE3_2021
+repo_path: /localdisk/home/s1680070/ADE_COI/ADE3_2021
+
 input_path: /localdisk/data/ADE3/20211007_1242_MN29515_FAR18190_0e9e0951/single_demuxed/
 output_path: /localdisk/home/s1680070/ADE_analysis
 report_template: /localdisk/home/s1680070/repositories/ADE_COI/adecoi/data/report_template.mako

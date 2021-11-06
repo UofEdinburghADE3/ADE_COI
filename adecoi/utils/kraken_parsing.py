@@ -14,8 +14,9 @@ def parse_report_for_taxa(report,min_reads,out_taxa):
                 l = l.rstrip("\n")
                 pcent,subreads,reads,rank,taxid,name = l.split("\t")
                 if int(reads) > min_reads:
-                    fw.write(f"{pcent},{subreads},{reads},{rank},{taxid},{name}\n")
-                    taxa_dict[taxid] = int(reads)
+                    if taxid != "0":
+                        fw.write(f"{pcent},{subreads},{reads},{rank},{taxid},{name.lstrip()}\n")
+                        taxa_dict[taxid] = int(reads)
     return taxa_dict
 
 def get_reads(taxa_dict,read_file,output_path):
