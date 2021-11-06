@@ -209,6 +209,7 @@ rule publish:
         ukrona = os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html"),
         cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     params:
+        barcode = "{barcode}",
         cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences"),
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
         pcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences")
@@ -221,19 +222,27 @@ rule publish:
         pukrona = os.path.join(config["publish_path"],"{barcode}","krona.unfiltered.html"),
         rfkrona = os.path.join(config["repo_path"],"{barcode}","krona.filtered.html"),
         rukrona = os.path.join(config["repo_path"],"{barcode}","krona.unfiltered.html")
-    shell:
-        """
-        cp {input.report} {output.preport}
-        cp {input.report} {output.rreport}
-        cp {input.fkrona} {output.pfkrona}
-        cp {input.fkrona} {output.rfkrona}
-        cp {input.ukrona} {output.pukrona}
-        cp {input.ukrona} {output.rukrona}
-        cp {input.cns} {output.pcns}
-        cp {input.cns} {output.rcns}
-        cp {params.cns_path}/*.fasta {params.rcns_path}
-        cp {params.cns_path}/*.fasta {params.pcns_path}
-        """
+    run:
+        shell(
+            """
+            cp {input.report} {output.preport}
+            cp {input.report} {output.rreport}
+            cp {input.fkrona} {output.pfkrona}
+            cp {input.fkrona} {output.rfkrona}
+            cp {input.ukrona} {output.pukrona}
+            cp {input.ukrona} {output.rukrona}
+            cp {input.cns} {output.pcns}
+            cp {input.cns} {output.rcns}
+            """)
+        try:
+            shell("""
+            cp {params.cns_path}/*.fasta {params.rcns_path}
+            cp {params.cns_path}/*.fasta {params.pcns_path}
+            """)
+        except:
+            print("No consensus files to copy for barcode {params.barcode}")
+
+
 
 
 
