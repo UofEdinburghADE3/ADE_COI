@@ -572,7 +572,7 @@
                 <h3><strong>Figure ${figure_count}</strong> | Read length distribution plot for Sequence ID ${barcode}</h3>
                 <hr>        
         <h2>2. Classification of unfiltered reads</h2>
-        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2021/${barcode}/krona.unfiltered.html">Go to read classifications.</a></p>
 
         <h2>3. Filtered sequencing reads</h2>
         <p><strong>Min length:</strong> ${config["min_length"]} </p>
@@ -606,12 +606,12 @@
         <h3><strong>Figure ${figure_count}</strong> | Filtered read length distribution plot for sequence id ${barcode}</h3>
                 <hr>  
         <h2>4. Classification of filtered reads</h2>
-        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2021/${barcode}/krona.filtered.html">Go to read classifications.</a></p>
         
         <h2>5. Taxa with consensus sequences generated.</h2>
-        <p><a href="http://uofedinburghade3.github.io/ADE_COI/">Go to read classifications.</a></p>
+        <p><strong>Note:</strong> consensus sequences were generated for taxa with more than 200 classified reads between 500-1000 base pairs in length.<a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2021/${barcode}/consensus_sequences">Go to consensus sequences.</a></p>
 
-        <h3><strong>Table 1</strong> | Summary of taxa generated </h3>
+        <h3><strong>Table 1</strong> | Summary of taxa in sample </h3>
           <button class="accordion">Table options</button>
           <div class="panel">
             <div class="row">

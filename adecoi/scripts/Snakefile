@@ -182,10 +182,12 @@ rule generate_report:
         histogram2 = os.path.join(config["output_path"],"{barcode}","figures","length_filtered_reads_histogram.svg")
     params:
         barcode = "{barcode}",
+        cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences")
     output:
         html = os.path.join(config["output_path"],"{barcode}","analysis_report.html")
     run:
-
+        # for seq in os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences"):
+        # if file empty, remove, else add to table
         data_for_report = {}
         report.get_read_counts(input.all_reads, input.classified_reads, input.filtered_reads, input.classified_filtered,data_for_report)
         report.load_histograms_svg(input.histogram1, input.histogram2, data_for_report)
