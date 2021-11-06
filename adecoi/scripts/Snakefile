@@ -207,7 +207,7 @@ rule publish:
         report = os.path.join(config["output_path"],"{barcode}","analysis_report.html"),
         fkrona = os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html"),
         ukrona = os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html"),
-        cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt")
+        cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     params:
         cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences"),
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
