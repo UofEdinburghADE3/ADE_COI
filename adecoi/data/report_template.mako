@@ -627,7 +627,7 @@
           <table class="display nowrap" id="myTable">
             <thead>
               <tr>
-              %for col in config["table_columns"]:
+              %for col in data_for_report["table_columns"]:
               <th style="width:10%;">${col.title().replace("_"," ")}</th>
               %endfor
               </tr>
@@ -635,7 +635,7 @@
             <tbody>
               % for row in data_for_report["taxa_table"]:
                   <tr>
-                    %for col in config["table_columns"]:
+                    %for col in data_for_report["table_columns"]:
                       <td>${row[col]}</td>
                     %endfor
                   </tr>
