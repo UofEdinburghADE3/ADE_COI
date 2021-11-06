@@ -528,12 +528,12 @@
       <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
       <div>
         <header class="civet-header">
-            ADE ${version} | 
-            <small class="text-muted">Animal diversity and evolution</small>
+            ADE3 | 
+            <small class="text-muted">Animal diversity and evolution 3</small>
             <hr>
         </header>
         
-        <h1>${config["report_title"]}
+        <h1>ADE3 ${barcode}
             <small class="text-muted" style="color:${themeColor}">${date}</small>
         </h1> 
         <br>
