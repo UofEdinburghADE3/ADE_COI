@@ -168,7 +168,7 @@ rule get_consensus_sequences:
                     "--forceall "
                     "--configfile {input.yaml:q} "
                     "--config barcode={params.barcode} outdir={params.outdir:q} "
-                    "--cores {workflow.cores} && touch {output.taxa}")
+                    "--cores 1 && touch {output.taxa}")
 
 rule generate_report:
     input:
