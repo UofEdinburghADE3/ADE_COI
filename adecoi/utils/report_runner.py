@@ -100,15 +100,38 @@ def load_histograms_svg(hist1, hist2, data_for_report):
     load_svgfile(hist1, "histogram1", data_for_report)
     load_svgfile(hist2, "histogram2", data_for_report)
 
-def data_for_table(input_taxa, data_for_report):
+def data_for_table(input_taxa, cns_path, data_for_report):
+
+    cns_built = []
+    files_to_remove = []
+    for r,d,f in os.walk(cns_path):
+        for filename in f:
+            if filename.endswith(".fasta"):
+                count = 0
+                for record in SeqIO.parse(os.path.join(r, filename),"fasta"):
+                    count +=1
+                if count != 0:
+                    cns_built.append(filename.split(".")[0])
+                else:
+                    files_to_remove.append(os.path.join(r,filename))
+
+
     #pcent_reads,sub_reads,reads,rank,taxid,taxon
     data_for_report["taxa_table"] = []
     with open(input_taxa, "r") as f:
         reader = csv.DictReader(f)
         #pcent_reads,sub_reads,reads,rank,taxid,taxon
-        data_for_report["table_columns"] = ["taxid","taxon","reads","sub_reads","pcent_reads"]
+        data_for_report["table_columns"] = ["taxid","taxon","reads","sub_reads","pcent_reads","consensus_available"]
+        row_dict = {}
         for row in reader:
-            data_for_report["taxa_table"].append(row)
+            row_dict = row
+            if row["taxid"] in cns_built:
+                row_dict["consensus_available"] = "True"
+            else:
+                row_dict["consensus_available"] = "False"
+                
+            data_for_report["taxa_table"].append(row_dict)
+    return files_to_remove
     
 
 def make_report(report_to_generate,config,data_for_report,barcode):
