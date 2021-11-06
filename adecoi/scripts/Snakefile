@@ -199,8 +199,8 @@ rule generate_report:
             config_loaded = yaml.safe_load(f)
 
         report.make_report(output.html,config_loaded,data_for_report,params.barcode)
-        for i in to_remove:
-            shell(f"rm {i}")
+        # for i in to_remove:
+        #     shell(f"rm {i}")
 
 rule publish:
     input:
