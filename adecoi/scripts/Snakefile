@@ -159,7 +159,7 @@ rule get_consensus_sequences:
         yaml = os.path.join(config["output_path"],"{barcode}","config.yaml")
     params:
         barcode = "{barcode}",
-        outdir = os.path.join(config["output_path"],"{barcode}","processed_taxa")
+        outdir = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences")
     output:
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     run:
