@@ -11,7 +11,7 @@ rule all:
         expand(os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html"), barcode=config["barcodes"]),
         expand(os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html"), barcode=config["barcodes"]),
         expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","taxa_present.csv"), barcode=config["barcodes"]),
-        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","cns.prompt.txt"), barcode=config["barcodes"]),
+        expand(os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt"), barcode=config["barcodes"]),
         expand(os.path.join(config["output_path"],"{barcode}","analysis_report.html"), barcode=config["barcodes"]),
         expand(os.path.join(config["repo_path"],"{barcode}","krona.unfiltered.html"), barcode=config["barcodes"])
 
