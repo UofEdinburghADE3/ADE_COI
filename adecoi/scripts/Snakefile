@@ -160,7 +160,7 @@ rule get_consensus_sequences:
     params:
         barcode = "{barcode}",
         outdir = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences")
-    threads: workflow.cores
+    threads: 4
     output:
         taxa = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     run:
@@ -169,7 +169,7 @@ rule get_consensus_sequences:
                     "--forceall "
                     "--configfile {input.yaml:q} "
                     "--config barcode={params.barcode} outdir={params.outdir:q} "
-                    "--cores {workflow.cores} && touch {output.taxa}")
+                    "--cores 4 && touch {output.taxa}")
 
 rule generate_report:
     input:
