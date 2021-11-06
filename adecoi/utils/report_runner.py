@@ -82,10 +82,10 @@ def get_read_counts(all_reads, classified_reads, filtered_reads, classified_filt
 
     data_for_report["total_reads"] = str(a_count)
     data_for_report["total_classified"] = str(ac_count)
-    data_for_report["total_prop_classified"]  = str(round(a_count/ac_count, 2))
+    data_for_report["total_prop_classified"]  = str(round(ac_count/a_count, 2))
     data_for_report["filtered_reads"] = str(f_count)
     data_for_report["filtered_classified"] = str(fc_count)
-    data_for_report["filtered_prop_classified"]  = str(round(f_count/fc_count, 2))
+    data_for_report["filtered_prop_classified"]  = str(round(fc_count/f_count, 2))
 
 def load_svgfile(file,key, data_for_report):
     svg = ""
