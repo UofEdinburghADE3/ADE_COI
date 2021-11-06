@@ -80,12 +80,12 @@ def get_read_counts(all_reads, classified_reads, filtered_reads, classified_filt
     f_count = count_reads(filtered_reads)
     fc_count = count_reads(classified_filtered)
 
-    data_for_report["total_reads"] = a_count
-    data_for_report["total_classified"] = ac_count
-    data_for_report["total_prop_classified"]  = round(a_count/ac_count, 2)
-    data_for_report["filtered_reads"] = f_count
-    data_for_report["filtered_classified"] = fc_count
-    data_for_report["filtered_prop_classified"]  = round(f_count/fc_count, 2)
+    data_for_report["total_reads"] = str(a_count)
+    data_for_report["total_classified"] = str(ac_count)
+    data_for_report["total_prop_classified"]  = str(round(a_count/ac_count, 2))
+    data_for_report["filtered_reads"] = str(f_count)
+    data_for_report["filtered_classified"] = str(fc_count)
+    data_for_report["filtered_prop_classified"]  = str(round(f_count/fc_count, 2))
 
 def load_svgfile(file,key, data_for_report):
     svg = ""
@@ -113,8 +113,6 @@ def data_for_table(input_taxa, data_for_report):
 def make_report(report_to_generate,config,data_for_report,barcode):
     #need to call this multiple times if there are multiple reports wanted
     
-    data = json.dumps(data_for_report) 
-    print(data)
     template_dir = os.path.abspath(os.path.dirname(config["report_template"]))
     mylookup = TemplateLookup(directories=[template_dir]) #absolute or relative works
 
@@ -124,7 +122,7 @@ def make_report(report_to_generate,config,data_for_report,barcode):
     ctx = Context(buf, 
                     date = date.today(), 
                     barcode = barcode,
-                    data_for_report = data,
+                    data_for_report = data_for_report,
                     config=config)
 
     try:
