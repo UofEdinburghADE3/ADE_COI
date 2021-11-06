@@ -689,7 +689,7 @@
         </div>
 
       <div class="col-sm-11" style="text-align: right;">
-        ADE ${version} | <small class="text-muted">Animal diversity and evolution</small> <br><small class="text-muted">GNU General Public License v3.0</small></div>
+        ADE3 | <small class="text-muted">Animal diversity and evolution</small> <br><small class="text-muted">GNU General Public License v3.0</small></div>
 
         <br><br>
         </p>
