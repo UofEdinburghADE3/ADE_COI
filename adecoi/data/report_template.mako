@@ -540,9 +540,9 @@
         </div>
     <br>
         <h2>All sequencing reads</h2>
-        <p><strong>Read count:</strong> ${config["total_reads"]} </p>
-        <p><strong>Reads classified:</strong> ${config["total_classified"]} </p>
-        <p><strong>Proportion of reads classified:</strong> ${config["total_prop_classified"]} </p>
+        <p><strong>Read count:</strong> ${data_for_report["total_reads"]} </p>
+        <p><strong>Reads classified:</strong> ${data_for_report["total_classified"]} </p>
+        <p><strong>Proportion of reads classified:</strong> ${data_for_report["total_prop_classified"]} </p>
         <% figure_count = 0 %>
 
             <br>
@@ -572,9 +572,9 @@
         <h2>Filtered sequencing reads</h2>
         <p><strong>Min length:</strong> ${config["min_length"]} </p>
         <p><strong>Max length:</strong> ${config["max_length"]} </p>
-        <p><strong>Read count post filtering:</strong> ${config["filtered_reads"]} </p>
-        <p><strong>Reads classified post filtering:</strong> ${config["filtered_classified"]} </p>
-        <p><strong>Proportion of reads classified:</strong> ${config["filtered_prop_classified"]} </p>
+        <p><strong>Read count post filtering:</strong> ${data_for_report["filtered_reads"]} </p>
+        <p><strong>Reads classified post filtering:</strong> ${data_for_report["filtered_classified"]} </p>
+        <p><strong>Proportion of reads classified:</strong> ${data_for_report["filtered_prop_classified"]} </p>
         
         <br>
         <button class="accordion">Export image</button>
