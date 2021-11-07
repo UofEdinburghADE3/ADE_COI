@@ -236,7 +236,6 @@ rule publish:
             cp {input.cns} {output.rcns}
             """)
         try:
-"/localdisk/data/ADE3/ADE3_2021_50x/barcode04/consensus_sequences/cns.prompt.txt"
             shell("""
             cp {params.cns_path}/*.fasta {params.rcns_path}
             cp {params.cns_path}/*.fasta {params.pcns_path}
