@@ -213,7 +213,7 @@ rule publish:
     params:
         barcode = "{barcode}",
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
-        pcns_path = os.path.join(config["publish"],"{barcode}","consensus_sequences")
+        pcns_path = os.path.join(config["publish_path"],"{barcode}","consensus_sequences")
     output:
         preport = os.path.join(config["publish_path"],"{barcode}","analysis_report.html"),
         rreport =os.path.join(config["repo_path"],"{barcode}","analysis_report.html"),
