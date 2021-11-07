@@ -609,7 +609,7 @@
         <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2021/${barcode}/krona.filtered.html">Go to read classifications.</a></p>
         
         <h2>5. Taxa with consensus sequences generated.</h2>
-        <p><strong>Note:</strong> consensus generation was run for taxa with more than 200 classified reads between 500-1000 base pairs in length. 
+        <p><strong>Note:</strong> consensus generation was run for taxa with more than ${config["min_reads"]} classified reads between 500-1000 base pairs in length. 
             A sequence may not be available if the group of reads for a given taxonomic id were too diverse.</p>
         <br>
         <h3><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2021/${barcode}/consensus_sequences">Go to consensus sequences.</a></h3>
