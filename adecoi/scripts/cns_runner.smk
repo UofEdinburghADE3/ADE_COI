@@ -5,7 +5,7 @@ barcode = config["barcode"]
 rule all:
     input:
         expand(os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta"), taxid=config["taxa"]),
-        expand(os.path.join(config["outdir"],"{taxid}.fasta"), taxid=config["taxa"])
+        expand(os.path.join(config["outdir"],"consensus_sequences","{taxid}.fasta"), taxid=config["taxa"])
 
 rule minimap2_racon0:
     input:
@@ -151,7 +151,7 @@ rule gather:
     input:
         os.path.join(config["outdir"],"{taxid}","medaka","consensus.fasta")
     output:
-        os.path.join(config["outdir"],"{taxid}.fasta")
+        os.path.join(config["outdir"],"consensus_sequences","{taxid}.fasta")
     shell:
         """
         cp {input[0]} {output[0]} 
