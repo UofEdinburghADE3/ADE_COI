@@ -5,7 +5,6 @@ from adecoi.utils import kraken_parsing
 from adecoi.utils import report_runner as report
 
 import yaml
-
 rule all:
     input:
         expand(os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html"), barcode=config["barcodes"]),
@@ -213,9 +212,8 @@ rule publish:
         cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     params:
         barcode = "{barcode}",
-        cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","consensus_sequences"),
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
-        pcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences")
+        pcns_path = os.path.join(config["publish"],"{barcode}","consensus_sequences")
     output:
         preport = os.path.join(config["publish_path"],"{barcode}","analysis_report.html"),
         rreport =os.path.join(config["repo_path"],"{barcode}","analysis_report.html"),
@@ -238,6 +236,7 @@ rule publish:
             cp {input.cns} {output.rcns}
             """)
         try:
+"/localdisk/data/ADE3/ADE3_2021_50x/barcode04/consensus_sequences/cns.prompt.txt"
             shell("""
             cp {params.cns_path}/*.fasta {params.rcns_path}
             cp {params.cns_path}/*.fasta {params.pcns_path}
