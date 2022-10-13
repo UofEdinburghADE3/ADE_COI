@@ -4,7 +4,7 @@ kraken_fasta: /localdisk/home/s1680070/ADE_analysis/kraken_databases/COI_all.fas
 publish_path: /localdisk/data/ADE3/ADE3_2022
 repo_path: /localdisk/home/s1680070/repositories/ADE_COI/ADE3_2022
 
-input_path: /localdisk/home/s1680070/ADE_2022/combined_run
+input_path: /localdisk/home/s1680070/ADE_2022/combined_run/fastq_pass
 output_path: /localdisk/home/s1680070/ADE_2022/combined_analysis
 report_template: /localdisk/home/s1680070/repositories/ADE_COI/adecoi/data/report_template.mako
 analysis_snakefile: /localdisk/home/s1680070/repositories/ADE_COI/adecoi/scripts/run_analysis.smk
