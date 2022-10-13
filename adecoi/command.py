@@ -18,7 +18,7 @@ def main(sysargs = sys.argv[1:]):
 
     i_group = parser.add_argument_group('Input options')
     i_group.add_argument('-c',"--config", action="store",help="Input config file in yaml format, all command line arguments can be passed via the config file.", dest="config")
-i_group.add_argument('--reference_name', action="store",
+    i_group.add_argument('--reference_name', action="store",
                          help="Optional input for the reference name in the focal alignment. Default: Reference",
                          dest="reference_name")
 
