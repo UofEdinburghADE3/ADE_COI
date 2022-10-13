@@ -13,7 +13,7 @@ dependencies:
   - pip=19.3.1
   - python=3.6
   - snakemake-minimal=5.10
-  - medaka=0.10.0
+  - medaka=1.5.0
   - racon=1.4.7
   - artic-network::rampart=1.0
   - kraken2>=2.1.2
