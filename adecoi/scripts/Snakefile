@@ -9,7 +9,7 @@ import yaml
 
 
 rule all:
-    yaml = os.path.join(config["output_path"],"updated_config.yaml")
+    os.path.join(config["output_path"],"updated_config.yaml")
 
 
 def gather_reads(dir_in,barcode,reads_out):
