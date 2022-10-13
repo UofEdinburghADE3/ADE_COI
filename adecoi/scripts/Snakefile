@@ -3,6 +3,7 @@ from Bio import SeqIO
 from adecoi.utils import histograms
 from adecoi.utils import kraken_parsing
 from adecoi.utils import report_runner as report
+import gzip
 
 import yaml
 rule all:
@@ -16,17 +17,40 @@ rule all:
         expand(os.path.join(config["publish_path"],"{barcode}","consensus_sequences","cns.prompt.txt"), barcode=config["barcodes"])
 
 
+def gather_reads(dir_in,barcode,reads_out):
+
+    if not os.path.exists(dir_in):
+        os.mkdir(dir_in)
+
+    fastq_records = []
+
+    total_reads = 0
+    with open(reads_out,"w") as fw:
+        for r,d,f in os.walk(dir_in):
+            for reads_in in f:
+                if reads_in.endswith(".gz") or reads_in.endswith(".gzip"):
+                    with gzip.open(os.path.join(dir_in,reads_in), "rt") as handle:
+                        for record in SeqIO.parse(handle, "fastq"):
+                            total_reads +=1
+                            fastq_records.append(record)
+
+                elif reads_in.endswith(".fastq") or reads_in.endswith(".fq"):
+                    for record in SeqIO.parse(os.path.join(dir_in,reads_in),"fastq"):
+                        total_reads +=1
+                        fastq_records.append(record)
+
+        print(f"Total reads {barcode}:",total_reads)
+        SeqIO.write(fastq_records,fw, "fastq")
+
 rule bin_files:
     input:
-        fastq = os.path.join(config["input_path"], "{barcode}", f"fastq_runid_{config['runid']}_0.fastq")
     params:
-        file_path = os.path.join(config["input_path"], "{barcode}")
+        file_path = os.path.join(config["input_path"], "{barcode}"),
+        barcode = "{barcode}"
     output:
         binned = os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq")
-    shell:
-        """
-        cat {params.file_path}/fastq_*.fastq > {output[0]}
-        """
+    run:
+        gather_reads(params.file_path,params.barcode,output.binned)
 
 rule kraken_classify:
     input:
