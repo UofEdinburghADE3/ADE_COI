@@ -139,13 +139,14 @@ def make_report(report_to_generate,config,data_for_report,barcode):
     
     template_dir = os.path.abspath(os.path.dirname(config["report_template"]))
     mylookup = TemplateLookup(directories=[template_dir]) #absolute or relative works
-
+    year = config["year"]
     mytemplate = Template(filename=config["report_template"], lookup=mylookup)
     buf = StringIO()
 
     ctx = Context(buf, 
                     date = date.today(), 
                     barcode = barcode,
+                    year = year,
                     data_for_report = data_for_report,
                     config=config)
 

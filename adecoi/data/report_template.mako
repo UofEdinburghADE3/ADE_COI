@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="https://raw.githubusercontent.com/cov-ert/civet/master/docs/virus.svg">
 
-    <title>ADE3 ${barcode}</title>
+    <title>ADE3 ${year} ${barcode}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
@@ -572,7 +572,7 @@
                 <h3><strong>Figure ${figure_count}</strong> | Read length distribution plot for Sequence ID ${barcode}</h3>
                 <hr>        
         <h2>2. Classification of unfiltered reads</h2>
-        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2021/${barcode}/krona.unfiltered.html">Go to read classifications.</a></p>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_${year}/${barcode}/krona.unfiltered.html">Go to read classifications.</a></p>
 
         <h2>3. Filtered sequencing reads</h2>
         <p><strong>Min length:</strong> ${config["min_length"]} </p>
@@ -606,13 +606,13 @@
         <h3><strong>Figure ${figure_count}</strong> | Filtered read length distribution plot for sequence id ${barcode}</h3>
                 <hr>  
         <h2>4. Classification of filtered reads</h2>
-        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2021/${barcode}/krona.filtered.html">Go to read classifications.</a></p>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_${year}/${barcode}/krona.filtered.html">Go to read classifications.</a></p>
         
         <h2>5. Taxa with consensus sequences generated.</h2>
         <p><strong>Note:</strong> consensus generation was run for taxa with more than ${config["min_reads"]} classified reads between 500-1000 base pairs in length. 
             A sequence may not be available if the group of reads for a given taxonomic id were too diverse.</p>
         <br>
-        <h3><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2021/${barcode}/consensus_sequences">Go to consensus sequences.</a></h3>
+        <h3><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_${year}/${barcode}/consensus_sequences">Go to consensus sequences.</a></h3>
 
         <h3><strong>Table 1</strong> | Summary of taxa in sample </h3>
           <button class="accordion">Table options</button>
