@@ -134,12 +134,11 @@ def data_for_table(input_taxa, cns_path, data_for_report):
     return files_to_remove
     
 
-def make_report(report_to_generate,config,data_for_report,barcode):
+def make_report(report_to_generate,config,data_for_report,barcode,year):
     #need to call this multiple times if there are multiple reports wanted
     
     template_dir = os.path.abspath(os.path.dirname(config["report_template"]))
     mylookup = TemplateLookup(directories=[template_dir]) #absolute or relative works
-    year = config["year"]
     mytemplate = Template(filename=config["report_template"], lookup=mylookup)
     buf = StringIO()
 
