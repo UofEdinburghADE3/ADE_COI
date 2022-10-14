@@ -234,6 +234,6 @@ rule publish:
             cp {params.cns_path}/*.fasta {params.pcns_path}
             """)
         except:
-            print("No consensus files to copy for barcode {params.barcode}")
+            print(f"No consensus files to copy for barcode {params.barcode}")
 
 
