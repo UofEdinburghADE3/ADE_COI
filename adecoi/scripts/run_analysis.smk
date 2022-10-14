@@ -204,7 +204,7 @@ rule publish:
         cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     params:
         barcode = "{barcode}",
-        cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences"),
+        cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","consensus_sequences"),
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
         pcns_path = os.path.join(config["publish_path"],"{barcode}","consensus_sequences")
     output:
@@ -229,6 +229,7 @@ rule publish:
             cp {input.cns} {output.rcns}
             """)
         try:
+
             shell("""
             cp {params.cns_path}/*.fasta {params.rcns_path}
             cp {params.cns_path}/*.fasta {params.pcns_path}
