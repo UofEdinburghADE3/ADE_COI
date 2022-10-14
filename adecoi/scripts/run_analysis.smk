@@ -203,6 +203,7 @@ rule publish:
         cns= os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences","cns.prompt.txt")
     params:
         barcode = "{barcode}",
+        cns_path = os.path.join(config["output_path"],"{barcode}","processed_taxa","consensus_sequences"),
         rcns_path = os.path.join(config["repo_path"],"{barcode}","consensus_sequences"),
         pcns_path = os.path.join(config["publish_path"],"{barcode}","consensus_sequences")
     output:
