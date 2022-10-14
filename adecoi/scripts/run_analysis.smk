@@ -191,8 +191,12 @@ rule generate_report:
 
         with open(input.yaml, 'r') as f:
             config_loaded = yaml.safe_load(f)
-
-        report.make_report(output.html,config_loaded,data_for_report,params.barcode)
+        try:
+            year = config["year"]
+        except:
+            print("not in config")
+            year = "2022"
+        report.make_report(output.html,config_loaded,data_for_report,params.barcode,year)
         # for i in to_remove:
         #     shell(f"rm {i}")
 
