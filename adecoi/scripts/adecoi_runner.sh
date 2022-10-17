@@ -13,3 +13,7 @@ snakemake --snakefile /localdisk/home/s1680070/repositories/ADE_COI/adecoi/scrip
             --forceall \
             --rerun-incomplete \
             --nolock
+
+rm /localdisk/home/s1680070/repositories/ADE_COI/adecoi/ADE_2022/barcode*/consensus_sequences/*.txt
+
+python adecoi/scripts/index_report.py #need a barcode name map file

@@ -18,7 +18,7 @@ config["index_template"] = "/Users/s1680070/repositories/ADE_COI/adecoi/data/ind
 config["year"] = "2022"
 config["barcodes_map"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2022/barcodes.csv"
 config["output_path"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2022"
-
+config["controls"] = ["26","45"]
 
 def make_report(report_to_generate,config,data_for_report,year):
     #need to call this multiple times if there are multiple reports wanted
@@ -72,13 +72,19 @@ for i in sorted(barcode_map,key= lambda x : int(x)):
         print("This barcode has no report",new_i)
     barcodes_mapped.append(new_i)
     data_for_report.append([barcode_map[i],new_i])
-print("Extra barcode with no student assigned")
+
+unknown_count = 0
 for r,d,f in os.walk(config["output_path"]):
     for dn in sorted(d):
         if "barcode" in dn:
             bc = dn.lstrip("barcode")
             if bc not in barcodes_mapped:
-                print(bc)
+                
+                if bc in config["controls"]:
+                    data_for_report.append([f"control",bc])
+                else:
+                    unknown_count+=1
+                    data_for_report.append([f"unknown_{unknown_count}",bc])
 
 make_report(output,config,data_for_report,config["year"])
 
