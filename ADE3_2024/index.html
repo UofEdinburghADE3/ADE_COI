@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://raw.githubusercontent.com/cov-ert/civet/master/docs/virus.svg">
+
+    <title>ADE3 2024 Sequencing Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rambaut/figtree.js@9880/dist/figtree.umd.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://sharonchoong.github.io/svg-exportJS/svg-export.min.js"></script>
+    <script src="https://unpkg.com/canvg/lib/umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfkit/js/pdfkit.min.js"></script>
+    <script src="https://github.com/devongovett/blob-stream/releases/download/v0.1.3/blob-stream.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-to-pdfkit/source.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.16.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.15.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.11.1"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+    body {
+        padding-top: 50px;
+        font-family: "ArialNova-Light", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+
+    table text {
+        font-family: "ArialNova-Light", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+
+    header {
+        display: block;
+        text-align: right;
+    }
+
+    svg {
+        width: 90%;
+        height: auto;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        padding: 10px;
+        flex: 50%;
+    }
+
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 13px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        transition: 0.4s;
+    }
+
+    .active, .accordion:hover {
+        background-color: #419595;
+        color: white;
+    }
+
+    .accordion:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+    .active:after {
+        content: "\2212";
+    }
+
+    .panel {
+        padding: 0 13px;
+        background-color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    .node-background {
+        fill: dimgrey;
+        stroke: dimgrey;
+    }
+
+    .node circle {
+        stroke-width: 0;
+        cursor: pointer;
+        /* fill:#7178bc; */
+        stroke: dimgrey;
+    }
+
+    .node circle.selected {
+        stroke-width: 0;
+        cursor: pointer;
+        fill: #419595;
+        stroke: dimgrey;
+    }
+
+    .node-background.query_boolean-True {
+        stroke: #419595;
+    }
+
+    .node.query_boolean-True circle {
+        stroke: #419595;
+    }
+
+    .node.query_boolean-True circle.selected {
+        stroke: #419595;
+    }
+
+    .node-background.query_boolean-True circle.selected {
+        stroke: #419595;
+    }
+
+    .node.query_boolean-True.hovered circle {
+        stroke: #419595;
+    }
+
+    .node rect {
+        stroke-width: 2;
+        fill: #419595;
+        stroke: dimgrey;
+    }
+
+    .svg-tooltip {
+        background: rgba(69, 77, 93, .9);
+        border-radius: .1rem;
+        color: #fff;
+        display: block;
+        font-size: 14px;
+        max-width: 320px;
+        padding: .2rem .4rem;
+        position: absolute;
+        text-overflow: ellipsis;
+        white-space: pre;
+        z-index: 300;
+        visibility: hidden;
+    }
+
+    .tooltip-header {
+        font-size: 1.3em;
+    }
+
+    .tooltip-key {
+        font-weight: bold;
+    }
+
+    .branch path {
+        stroke-width: 2;
+        stroke: dimgrey;
+        stroke-linejoin: round;
+        cursor: pointer;
+    }
+
+    .branch.hovered path {
+        stroke-width: 4;
+        stroke: dimgrey;
+    }
+
+    .node.hovered circle {
+        stroke-width: 5;
+        stroke: dimgrey
+    }
+
+    .node text {
+        font-family: "ArialNova-Light", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+        font-size: 0.9em;
+    }/* .starter-template {
+            padding: 40px 15px;
+            text-align: left;
+          } */
+
+    .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        border-top: 1px solid rgb(148, 148, 148);
+        border-bottom: none;
+    }
+
+    .svg-icon {
+        display: inline-flex;
+        align-self: center;
+    }
+
+    h3 {
+        font-size: 1em;
+    }
+
+    #toTopBtn {
+        position: fixed;
+        bottom: 26px;
+        right: 39px;
+        z-index: 98;
+        padding: 21px;
+        background-color: #419595
+    }
+
+    .js .cd-top--fade-out {
+        opacity: .5
+    }
+
+    .js .cd-top--is-visible {
+        visibility: visible;
+        opacity: 1
+    }
+
+    .js .cd-top {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity .3s, visibility .3s, background-color .3s
+    }
+
+    .cd-top {
+        position: fixed;
+        bottom: 20px;
+        bottom: var(--cd-back-to-top-margin);
+        right: 20px;
+        right: var(--cd-back-to-top-margin);
+        display: inline-block;
+        height: 40px;
+        height: var(--cd-back-to-top-size);
+        width: 40px;
+        width: var(--cd-back-to-top-size);
+        box-shadow: 0 0 10px rgba(0, 0, 0, .05) !important;
+        background: url(https://res.cloudinary.com/dxfq3iotg/image/upload/v1571057658/cd-top-arrow.svg) no-repeat center 50%;
+        background-color: #419595;
+        background-color: hsla(var(--cd-color-3-h), var(--cd-color-3-s), var(--cd-color-3-l), 0.8)
+    }
+
+    .slidecontainer {
+        width: 100%;
+    }
+
+    .colourSelect {
+        background: #eee;
+        border-radius: 5px;
+        padding: 4px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        background: #d3d3d3;
+        border-radius: 5px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #419595;
+        stroke: dimgrey;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        stroke: dimgrey;
+        background: #419595;
+        cursor: pointer;
+    }
+
+    .tree-container {
+        max-height: 1000px;
+        overflow: scroll;
+    }
+
+    .label {
+        display: none;
+    }
+
+    .label.show {
+        display: inline;
+    }
+
+    .node.hovered .label {
+        display: inline;
+    }
+
+    div.sticky {
+        position: -webkit-sticky;
+        /* Safari */
+        position: sticky;
+        top: 0;
+    }
+
+    .searchbar {
+        border-style: solid;
+        border-color: lightgrey;
+        border-radius: 5px;
+        float: right
+    }
+
+    @media print {
+        .tree-container {
+            max-height: none;
+            overflow: visible;
+        }
+
+        .slider-block {
+            display: none;
+        }
+
+        .container {
+            padding-right: 1.5cm;
+            padding-left: 1.5cm;
+            padding-bottom: 1.5cm;
+            margin: 1cm;
+            min-width: 2200px;
+            font-size: 2.5vw;
+        }
+
+        .searchbar {
+            display: none;
+        }
+
+        h3 {
+            font-size: 2.5vw;
+        }
+
+        h2 {
+            font-size: 4vw;
+            padding: 1cm;
+        }
+
+        h1 {
+            font-size: 5vw;
+        }
+
+        .command-block {
+            display: none;
+        }
+
+        pre {
+            display: none;
+        }
+
+        .civet-logo {
+            width: 2cm;
+            height: 2cm;
+        }
+
+        .tree_svg {
+            width: 1200px
+        }
+
+        .page-footer {
+            display: none;
+        }
+
+        .civet-header {
+            text-align: left;
+        }
+
+        .content-block, p {
+            page-break-inside: avoid;
+        }
+    }
+
+    @media screen and (prefers-color-scheme: dark) {
+        body {
+            background-color: #17141F;
+            color: #F2E7DC;
+            opacity: 0.95;
+        }
+
+        img {
+            filter: brightness(.8) contrast(1.2);
+        }
+
+        .component {
+            background-color: #2C2640;
+        }
+
+        .table-striped > tbody > tr:nth-child(odd) {
+            background-color: #2C2640;
+            /* border-top-color: #3B325B; */
+            /* border-color: #2C2640; */
+            opacity: 0.9;
+        }
+
+        .table {
+            border-top: 0px;
+            /* border-color: #3B325B; */
+            background-color: #17141F;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            border-top: none;
+        }
+
+        .accordion {
+            background-color: #2C2640;
+            color: #F2E7DC;
+            cursor: pointer;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+            background-color: #17141F;
+        }
+
+        .accordion:after {
+            content: '\002B';
+            color: #F2E7DC;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .active:after {
+            content: "\2212";
+        }
+
+        .panel {
+            padding: 0 12px;
+            background-color: #2C2640;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
+        pre {
+            background-color: #3B325B;
+            color: #F2E7DC;
+            border: none;
+            opacity: 0.8;
+        }
+
+        .searchbar {
+            background-color: #3B325B;
+            color: #F2E7DC;
+            border-style: none;
+            opacity: 0.8;
+        }
+
+        .slider {
+            background: #F2E7DC;
+            stroke: #F2E7DC;
+        }
+
+        .slider::-webkit-slider-thumb {
+            background: #5F9C82;
+            fill: #5F9C82;
+            stroke: #F2E7DC;
+        }
+
+        .slider::-moz-range-thumb {
+            stroke: #F2E7DC;
+            background: #5F9C82;
+            fill: #5F9C82;
+        }
+
+        .node-background {
+            fill: #F2E7DC;
+            stroke: #F2E7DC;
+            opacity: 0.85;
+        }
+
+        .node circle {
+            stroke-width: 0;
+            cursor: pointer;
+            fill: #5F9C82;
+            stroke: #F2E7DC;
+        }
+
+        .node circle.selected {
+            stroke-width: 0;
+            cursor: pointer;
+            fill: #E27E7E;
+            stroke: #F2E7DC;
+            opacity: 1;
+        }
+
+        .node rect {
+            stroke-width: 2;
+            fill: #E27E7E;
+            stroke: #F2E7DC;
+        }
+
+        .svg-tooltip {
+            background: rgba(69, 77, 93, .9);
+            color: #F2E7DC;
+        }
+
+        .branch path {
+            stroke: #F2E7DC;
+            opacity: 0.85;
+        }
+
+        .branch.hovered path {
+            stroke: #F2E7DC;
+            opacity: 1;
+        }
+
+        .node.hovered circle {
+            stroke: #F2E7DC;
+            opacity: 1;
+        }
+
+        .node text {
+            font-family: "ArialNova-Light", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-weight: 300;
+            font-size: 0.9em;
+            color: #F2E7DC;
+            fill: #F2E7DC;
+        }
+
+        .scale-bar line {
+            stroke: #F2E7DC;
+        }
+
+        .scale-bar text {
+            fill: #F2E7DC;
+            color: #F2E7DC;
+        }
+    }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
+        <div>
+            <header class="civet-header">
+
+                            ADE3 | 
+                            
+                <small class="text-muted">Animal diversity and evolution 3</small>
+                <hr>
+            </header>
+
+            <h1>
+                ADE3 2024 Sequencing Results
+                            
+                <small class="text-muted" style="color:#419595">2024-10-25</small>
+            </h1>
+            <hr>
+            <br>
+        </div>
+        <br>
+        <table class="display nowrap" id="myTable">
+            <thead>
+                <tr>
+                    <th style="width:30%;">Name</th>
+                    <th style="width:10%;">ID</th>
+                    <th style="width:20%;"></th>
+                    <th style="width:20%;"></th>
+                    <th style="width:20%;"></th>
+                </tr>
+            </thead>
+                <tbody>
+                        
+                        <tr><td>JB</td>
+                            <td>01</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode01/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode01/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode01/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>SS</td>
+                            <td>02</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode02/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode02/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode02/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CW</td>
+                            <td>03</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode03/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode03/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode03/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AR1</td>
+                            <td>04</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode04/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode04/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode04/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>JC</td>
+                            <td>05</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode05/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode05/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode05/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>KC</td>
+                            <td>06</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode06/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode06/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode06/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>RD</td>
+                            <td>07</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode07/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode07/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode07/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NW</td>
+                            <td>08</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode08/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode08/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode08/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>PS</td>
+                            <td>09</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode09/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode09/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode09/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>HA</td>
+                            <td>10</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode10/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode10/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode10/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AH2</td>
+                            <td>11</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode11/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode11/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode11/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AH1</td>
+                            <td>12</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode12/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode12/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode12/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CG1</td>
+                            <td>13</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode13/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode13/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode13/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AC</td>
+                            <td>14</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode14/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode14/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode14/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>PN</td>
+                            <td>15</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode15/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode15/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode15/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CG2</td>
+                            <td>16</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode16/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode16/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode16/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>TLT</td>
+                            <td>17</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode17/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode17/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode17/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CB</td>
+                            <td>18</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode18/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode18/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode18/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>EL1</td>
+                            <td>19</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode19/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode19/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode19/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>VDV</td>
+                            <td>20</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode20/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode20/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode20/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AM</td>
+                            <td>21</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode21/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode21/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode21/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>SB</td>
+                            <td>22</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode22/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode22/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode22/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CH1</td>
+                            <td>23</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode23/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode23/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode23/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>GG</td>
+                            <td>24</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode24/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode24/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode24/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>MM</td>
+                            <td>25</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode25/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode25/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode25/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>MK</td>
+                            <td>26</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode26/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode26/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode26/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>RH</td>
+                            <td>27</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode27/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode27/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode27/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>PB</td>
+                            <td>28</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode28/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode28/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode28/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>MD</td>
+                            <td>29</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode29/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode29/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode29/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AUS</td>
+                            <td>30</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode30/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode30/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode30/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>RW</td>
+                            <td>31</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode31/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode31/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode31/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>WT</td>
+                            <td>32</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode32/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode32/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode32/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>DJ</td>
+                            <td>33</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode33/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode33/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode33/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>FH</td>
+                            <td>34</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode34/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode34/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode34/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>EL2</td>
+                            <td>35</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode35/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode35/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode35/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>JM1</td>
+                            <td>36</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode36/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode36/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode36/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>RB</td>
+                            <td>37</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode37/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode37/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode37/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CS</td>
+                            <td>38</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode38/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode38/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode38/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>CH2</td>
+                            <td>39</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode39/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode39/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode39/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>ES2</td>
+                            <td>40</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode40/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode40/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode40/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>LM</td>
+                            <td>41</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode41/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode41/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode41/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>OT</td>
+                            <td>42</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode42/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode42/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode42/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>DM1</td>
+                            <td>43</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode43/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode43/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode43/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>ES1</td>
+                            <td>44</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode44/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode44/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode44/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>AY</td>
+                            <td>45</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode45/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode45/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode45/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>BJ</td>
+                            <td>46</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode46/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode46/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode46/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>BT</td>
+                            <td>47</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode47/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode47/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode47/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>GP</td>
+                            <td>48</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode48/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode48/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode48/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>EB</td>
+                            <td>49</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode49/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode49/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode49/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>SC</td>
+                            <td>50</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode50/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode50/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode50/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>JM2</td>
+                            <td>51</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode51/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode51/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode51/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>JPB</td>
+                            <td>52</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode52/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode52/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode52/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>MS</td>
+                            <td>53</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode53/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode53/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode53/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM1</td>
+                            <td>54</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode54/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode54/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode54/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM2</td>
+                            <td>55</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode55/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode55/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode55/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM3</td>
+                            <td>56</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode56/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode56/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode56/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM4</td>
+                            <td>57</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode57/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode57/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode57/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM5</td>
+                            <td>58</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode58/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode58/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode58/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>NM6</td>
+                            <td>59</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode59/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode59/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode59/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>KM</td>
+                            <td>60</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode60/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode60/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode60/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>unknown_1</td>
+                            <td>62</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode62/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode62/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode62/consensus_sequences">consensus sequences</a></td></tr>
+                        
+                        <tr><td>unknown_2</td>
+                            <td>92</td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode92/analysis_report.html">sequencing report</a></td>
+                            <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2024/barcode92/krona.filtered.html">read classification</a></td>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2024/barcode92/consensus_sequences">consensus sequences</a></td></tr>
+                    </tbody>
+        </table>
+
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#myTable').DataTable({
+                "paging": false,
+                "border-bottom": false,
+                dom: 'frtip',
+                buttons: ["copy", "csv", "print"]
+            });
+            table.buttons().container().appendTo($('#tableExportID'));
+            $('a.toggle-vis').on('click', function(e) {
+                e.preventDefault();
+
+                // Get the column API object
+                var column = table.column($(this).attr('data-column'));
+
+                // Toggle the visibility
+                column.visible(!column.visible());
+            });
+
+        });
+        </script>
+
+        <footer class="page-footer">
+            <div class="container-fluid text-right text-md-right">
+                <hr>
+                <div class="row"></div>
+
+                <div class="col-sm-11" style="text-align: right;">
+
+                            ADE3 | 
+                    <small class="text-muted">Animal diversity and evolution</small>
+                    <br>
+                    <small class="text-muted">GNU General Public License v3.0</small>
+                </div>
+
+                <br>
+                <br>
+                </p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

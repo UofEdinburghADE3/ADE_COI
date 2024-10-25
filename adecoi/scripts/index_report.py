@@ -15,10 +15,10 @@ from io import StringIO
 
 config = {}
 config["index_template"] = "/Users/s1680070/repositories/ADE_COI/adecoi/data/index_template.mako"
-config["year"] = "2022"
-config["barcodes_map"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2022/barcodes.csv"
-config["output_path"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2022"
-config["controls"] = ["26","45"]
+config["year"] = "2024"
+config["barcodes_map"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2024/barcodes.csv"
+config["output_path"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2024"
+config["controls"] = []
 
 def make_report(report_to_generate,config,data_for_report,year):
     #need to call this multiple times if there are multiple reports wanted
@@ -39,7 +39,7 @@ def make_report(report_to_generate,config,data_for_report,year):
     except:
         traceback = RichTraceback()
         for (filename, lineno, function, line) in traceback.traceback:
-            print("File %s, line %s, in %s" % (filename, lineno, function))
+            print("File %s, xline %s, in %s" % (filename, lineno, function))
             print(line, "\n")
         print("%s: %s" % (str(traceback.error.__class__.__name__), traceback.error))
 
