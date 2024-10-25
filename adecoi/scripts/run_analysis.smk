@@ -200,6 +200,8 @@ rule generate_report:
         # for i in to_remove:
         #     shell(f"rm {i}")
 
+
+
 rule publish:
     input:
         report = os.path.join(config["output_path"],"{barcode}","analysis_report.html"),
