@@ -1,0 +1,2242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://raw.githubusercontent.com/cov-ert/civet/master/docs/virus.svg">
+
+    <title>ADE3 2022 barcode55</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rambaut/figtree.js@9880/dist/figtree.umd.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://sharonchoong.github.io/svg-exportJS/svg-export.min.js"></script>
+    <script src="https://unpkg.com/canvg/lib/umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfkit/js/pdfkit.min.js"></script>
+    <script src="https://github.com/devongovett/blob-stream/releases/download/v0.1.3/blob-stream.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-to-pdfkit/source.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.16.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.15.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.11.1"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+      body {
+        padding-top: 50px;
+        font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      }
+      table text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+      }
+      header {
+          display: block;
+          text-align: right;
+      
+      }
+      svg {width: 90%; height: auto;}
+      .row {
+          display: flex;
+        }
+        .column {
+          padding: 10px;
+          flex: 50%;
+        }
+      .accordion {
+          background-color: #eee;
+          color: #444;
+          cursor: pointer;
+          padding: 13px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+          background-color: #419595;
+          color: white;
+        }
+
+        .accordion:after {
+          content: '\002B';
+          color: white;
+          font-weight: bold;
+          float: right;
+          margin-left: 5px;
+        }
+
+        .active:after {
+          content: "\2212";
+        }
+
+        .panel {
+          padding: 0 13px;
+          background-color: white;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+        }
+      .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+          }
+      .node-background{
+          fill:dimgrey;
+          stroke:dimgrey;
+      }
+      .node circle{
+        stroke-width:0;
+        cursor:pointer;
+        /* fill:#7178bc; */
+        stroke:dimgrey;
+        }
+      .node circle.selected{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#419595;
+        stroke:dimgrey;
+        }
+      .node-background.query_boolean-True{
+          stroke:#419595;
+      }
+      .node.query_boolean-True circle{
+        stroke:#419595;
+      }
+      .node.query_boolean-True circle.selected{
+        stroke:#419595;
+      }
+      .node-background.query_boolean-True circle.selected{
+          stroke:#419595;
+      }
+      .node.query_boolean-True.hovered circle{
+          stroke:#419595;
+      }
+      .node rect{
+        stroke-width:2;
+        fill:#419595;
+        stroke:dimgrey;
+      }
+      .svg-tooltip {
+          background: rgba(69,77,93,.9);
+          border-radius: .1rem;
+          color: #fff;
+          display: block;
+          font-size: 14px;
+          max-width: 320px;
+          padding: .2rem .4rem;
+          position: absolute;
+          text-overflow: ellipsis;
+          white-space: pre;
+          z-index: 300;
+          visibility: hidden;
+    }
+    .tooltip-header {
+      font-size: 1.3em;
+    }
+    .tooltip-key {
+      font-weight: bold;
+    }
+    .branch path{
+      stroke-width:2;
+      stroke: dimgrey;
+      stroke-linejoin:round;
+      cursor: pointer;
+      }
+      .branch.hovered path{
+        stroke-width:4;
+        stroke: dimgrey;
+      }
+        .node.hovered circle{
+        stroke-width:5;
+        stroke: dimgrey
+        }
+        .node text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+          font-weight: 300;
+          font-size: 0.9em;
+        }
+      /* .starter-template {
+        padding: 40px 15px;
+        text-align: left;
+      } */
+      .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        border-top: 1px solid  rgb(148, 148, 148);
+        border-bottom: none;
+      }
+      .svg-icon {
+      display: inline-flex;
+      align-self: center;
+      }
+      h3{
+          font-size: 1em;
+      }
+      #toTopBtn {
+      position: fixed;
+      bottom: 26px;
+      right: 39px;
+      z-index: 98;
+      padding: 21px;
+      background-color: #419595
+      }
+      .js .cd-top--fade-out {
+          opacity: .5
+      }
+      .js .cd-top--is-visible {
+          visibility: visible;
+          opacity: 1
+      }
+      .js .cd-top {
+          visibility: hidden;
+          opacity: 0;
+          transition: opacity .3s, visibility .3s, background-color .3s
+      }
+      .cd-top {
+          position: fixed;
+          bottom: 20px;
+          bottom: var(--cd-back-to-top-margin);
+          right: 20px;
+          right: var(--cd-back-to-top-margin);
+          display: inline-block;
+          height: 40px;
+          height: var(--cd-back-to-top-size);
+          width: 40px;
+          width: var(--cd-back-to-top-size);
+          box-shadow: 0 0 10px rgba(0, 0, 0, .05) !important;
+          background: url(https://res.cloudinary.com/dxfq3iotg/image/upload/v1571057658/cd-top-arrow.svg) no-repeat center 50%;
+          background-color: #419595;
+          background-color: hsla(var(--cd-color-3-h), var(--cd-color-3-s), var(--cd-color-3-l), 0.8)
+      }
+      .slidecontainer {
+        width: 100%;
+      }
+      .colourSelect {
+        background: #eee;
+        border-radius: 5px;
+        padding: 4px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+      }
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        background: #d3d3d3;
+        border-radius: 5px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      .slider:hover {
+        opacity: 1; 
+      }
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%; 
+        background: #419595;
+        stroke: dimgrey;
+        cursor: pointer;
+      }
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        stroke: dimgrey;
+        background: #419595;
+        cursor: pointer;
+      } 
+      .tree-container{
+        max-height: 1000px;
+        overflow: scroll;
+      }
+      .label{
+        display: none;
+      }
+      .label.show{
+        display: inline;
+      }
+      .node.hovered .label {
+          display:inline;
+        }
+      div.sticky {
+          position: -webkit-sticky; /* Safari */
+          position: sticky;
+          top: 0;
+        }
+        .searchbar {
+          border-style:solid; 
+          border-color: lightgrey; 
+          border-radius: 5px; 
+          float:right
+        }
+      @media print {
+        .tree-container{
+        max-height: none;
+        overflow: visible;
+        
+        }
+        
+        .slider-block {
+          display: none;
+        }
+        .container {
+        padding-right: 1.5cm;
+        padding-left: 1.5cm;
+        padding-bottom: 1.5cm;
+        margin: 1cm;
+        min-width: 2200px;
+        font-size:2.5vw;
+        }
+        .searchbar {
+          display: none;
+        }
+        h3{ 
+          font-size: 2.5vw;
+        }
+        h2 {
+          font-size: 4vw;
+          padding: 1cm;
+        }
+        h1 {
+          font-size: 5vw;
+        }
+        .command-block {
+          display: none;
+        }
+        pre {
+          display: none;
+        }
+        .civet-logo {
+          width: 2cm;
+          height: 2cm;
+        }
+        .tree_svg {
+          width: 1200px
+        }
+        .page-footer {
+          display: none;
+        }
+        .civet-header {
+          text-align: left;
+        }
+        .content-block, p {
+        page-break-inside: avoid;
+        }
+      }
+      @media screen and (prefers-color-scheme: dark) {
+        body {
+            background-color: #17141F;
+            color: #F2E7DC;
+            opacity: 0.95;
+          }
+          img {
+            filter: brightness(.8) contrast(1.2);
+          }
+        .component {
+          background-color: #2C2640;
+        }
+        .table-striped>tbody>tr:nth-child(odd) {
+          background-color: #2C2640;
+          /* border-top-color: #3B325B; */
+          /* border-color: #2C2640; */
+          opacity: 0.9;
+        }
+        .table {
+          border-top: 0px;
+          /* border-color: #3B325B; */
+          background-color: #17141F;
+      }
+      .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        border-top: none;
+      }
+      .accordion {
+          background-color: #2C2640;
+          color: #F2E7DC;
+          cursor: pointer;
+          padding: 12px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+          background-color: #17141F;
+        }
+
+        .accordion:after {
+          content: '\002B';
+          color: #F2E7DC;
+          font-weight: bold;
+          float: right;
+          margin-left: 5px;
+        }
+
+        .active:after {
+          content: "\2212";
+        }
+
+        .panel {
+          padding: 0 12px;
+          background-color: #2C2640;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+        }
+      pre {
+        background-color: #3B325B;
+        color: #F2E7DC;
+        border: none;
+        opacity: 0.8;
+      }
+      .searchbar {
+        background-color: #3B325B;
+        color: #F2E7DC;
+        border-style:none;
+        opacity: 0.8;
+        }
+      .slider {
+        background: #F2E7DC;
+        stroke: #F2E7DC;
+      }
+      .slider::-webkit-slider-thumb {
+        background: #5F9C82;
+        fill: #5F9C82;
+        stroke: #F2E7DC;
+      }
+      .slider::-moz-range-thumb {
+        stroke: #F2E7DC;
+        background: #5F9C82;
+        fill: #5F9C82;
+      } 
+      .node-background{
+          fill:#F2E7DC;
+          stroke:#F2E7DC;
+          opacity: 0.85;
+      }
+      .node circle{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#5F9C82;
+        stroke:#F2E7DC;
+        
+        }
+      .node circle.selected{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#E27E7E;
+        stroke:#F2E7DC;
+        opacity: 1;
+        }
+      .node rect{
+        stroke-width:2;
+        fill:#E27E7E;
+        stroke:#F2E7DC;
+      }
+      .svg-tooltip {
+          background: rgba(69,77,93,.9);
+          color: #F2E7DC;
+    }
+    .branch path{
+      stroke: #F2E7DC;
+      opacity: 0.85;
+      }
+      .branch.hovered path{
+        stroke:#F2E7DC;
+        opacity: 1;
+      }
+        .node.hovered circle{
+          stroke:#F2E7DC;
+        opacity: 1;
+        }
+        .node text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+          font-weight: 300;
+          font-size: 0.9em;
+          color: #F2E7DC;
+          fill: #F2E7DC;        
+        }
+        .scale-bar line {
+          stroke: #F2E7DC;
+        }
+        .scale-bar text{
+          fill: #F2E7DC;
+          color:  #F2E7DC;
+        }
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <script>
+      $(document).ready(function() {
+        $(window).scroll(function() {
+        if ($(this).scrollTop() > 20) {
+        $('#toTopBtn').fadeIn();
+        } else {
+        $('#toTopBtn').fadeOut();
+        }
+        });
+        
+        $('#toTopBtn').click(function() {
+        $("html, body").animate({
+        scrollTop: 0
+        }, 400);
+        return false;
+        });
+        });
+    </script>
+
+<script>
+  function exportImageSVG(buttonID,svgID,name){
+      document.querySelector(buttonID).onclick = function(){
+          svgExport.downloadSvg(document.querySelector(svgID), name);
+      };
+  };
+  function exportImagePNG(buttonID,svgID,name){
+      document.querySelector(buttonID).onclick = function(){
+          svgExport.downloadPng(document.querySelector(svgID), name);
+      };
+  };
+</script>
+    <div class="container">
+      <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
+      <div>
+        <header class="civet-header">
+            ADE3 | 
+            <small class="text-muted">Animal diversity and evolution 3</small>
+            <hr>
+        </header>
+        
+        <h1>ADE3 barcode55
+            <small class="text-muted" style="color:#419595">2022-10-14</small>
+        </h1> 
+        <hr>
+        <br>
+        </div>
+    <br>
+
+        <h2>1. All sequencing reads</h2>
+        <p><strong>Read count:</strong> 243187 </p>
+        <p><strong>Reads classified:</strong> 203674 </p>
+        <p><strong>Proportion of reads classified:</strong> 0.84 </p>
+        
+
+            <br>
+            <button class="accordion">Export image</button>
+                <div class="panel">
+                <div class="row">
+                    <div class="column">
+                    <button id="total_classified_svg">SVG</button>
+                    </div>
+                    <div class="column">
+                    <button id="total_classified_png">PNG</button>
+                    </div>
+                </div>
+                </div>
+                <div id="total_classified">
+                <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="360pt" version="1.1" viewBox="0 0 1080 360" width="1080pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2022-10-13T17:02:08.742341</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.3.4, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linecap:butt;stroke-linejoin:round;}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="axes_1">
+   <g id="patch_1">
+    <path d="M 105.19 311.24 
+L 1058.4 311.24 
+L 1058.4 21.6 
+L 105.19 21.6 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g id="patch_2">
+    <path clip-path="url(#pbc74eb3604)" d="M 148.517727 311.24 
+L 165.848818 311.24 
+L 165.848818 298.799165 
+L 148.517727 298.799165 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pbc74eb3604)" d="M 165.848818 311.24 
+L 183.179909 311.24 
+L 183.179909 281.843639 
+L 165.848818 281.843639 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pbc74eb3604)" d="M 183.179909 311.24 
+L 200.511 311.24 
+L 200.511 307.11637 
+L 183.179909 307.11637 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pbc74eb3604)" d="M 200.511 311.24 
+L 217.842091 311.24 
+L 217.842091 293.61045 
+L 200.511 293.61045 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pbc74eb3604)" d="M 217.842091 311.24 
+L 235.173182 311.24 
+L 235.173182 309.25449 
+L 217.842091 309.25449 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pbc74eb3604)" d="M 235.173182 311.24 
+L 252.504273 311.24 
+L 252.504273 309.40233 
+L 235.173182 309.40233 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pbc74eb3604)" d="M 252.504273 311.24 
+L 269.835364 311.24 
+L 269.835364 309.362588 
+L 252.504273 309.362588 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pbc74eb3604)" d="M 269.835364 311.24 
+L 287.166455 311.24 
+L 287.166455 273.779193 
+L 269.835364 273.779193 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pbc74eb3604)" d="M 287.166455 311.24 
+L 304.497545 311.24 
+L 304.497545 35.392381 
+L 287.166455 35.392381 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pbc74eb3604)" d="M 304.497545 311.24 
+L 321.828636 311.24 
+L 321.828636 310.085892 
+L 304.497545 310.085892 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pbc74eb3604)" d="M 321.828636 311.24 
+L 339.159727 311.24 
+L 339.159727 310.356138 
+L 321.828636 310.356138 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pbc74eb3604)" d="M 339.159727 311.24 
+L 356.490818 311.24 
+L 356.490818 310.883912 
+L 339.159727 310.883912 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pbc74eb3604)" d="M 356.490818 311.24 
+L 373.821909 311.24 
+L 373.821909 311.049238 
+L 356.490818 311.049238 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pbc74eb3604)" d="M 373.821909 311.24 
+L 391.153 311.24 
+L 391.153 311.152568 
+L 373.821909 311.152568 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_16">
+    <path clip-path="url(#pbc74eb3604)" d="M 391.153 311.24 
+L 408.484091 311.24 
+L 408.484091 311.19072 
+L 391.153 311.19072 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_17">
+    <path clip-path="url(#pbc74eb3604)" d="M 408.484091 311.24 
+L 425.815182 311.24 
+L 425.815182 311.174823 
+L 408.484091 311.174823 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_18">
+    <path clip-path="url(#pbc74eb3604)" d="M 425.815182 311.24 
+L 443.146273 311.24 
+L 443.146273 311.057187 
+L 425.815182 311.057187 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_19">
+    <path clip-path="url(#pbc74eb3604)" d="M 443.146273 311.24 
+L 460.477364 311.24 
+L 460.477364 310.597769 
+L 443.146273 310.597769 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_20">
+    <path clip-path="url(#pbc74eb3604)" d="M 460.477364 311.24 
+L 477.808455 311.24 
+L 477.808455 311.044469 
+L 460.477364 311.044469 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_21">
+    <path clip-path="url(#pbc74eb3604)" d="M 477.808455 311.24 
+L 495.139545 311.24 
+L 495.139545 311.162106 
+L 477.808455 311.162106 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_22">
+    <path clip-path="url(#pbc74eb3604)" d="M 495.139545 311.24 
+L 512.470636 311.24 
+L 512.470636 311.208206 
+L 495.139545 311.208206 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_23">
+    <path clip-path="url(#pbc74eb3604)" d="M 512.470636 311.24 
+L 529.801727 311.24 
+L 529.801727 311.227283 
+L 512.470636 311.227283 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_24">
+    <path clip-path="url(#pbc74eb3604)" d="M 529.801727 311.24 
+L 547.132818 311.24 
+L 547.132818 311.236821 
+L 529.801727 311.236821 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_25">
+    <path clip-path="url(#pbc74eb3604)" d="M 547.132818 311.24 
+L 564.463909 311.24 
+L 564.463909 311.230462 
+L 547.132818 311.230462 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_26">
+    <path clip-path="url(#pbc74eb3604)" d="M 564.463909 311.24 
+L 581.795 311.24 
+L 581.795 311.235231 
+L 564.463909 311.235231 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_27">
+    <path clip-path="url(#pbc74eb3604)" d="M 581.795 311.24 
+L 599.126091 311.24 
+L 599.126091 311.227283 
+L 581.795 311.227283 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_28">
+    <path clip-path="url(#pbc74eb3604)" d="M 599.126091 311.24 
+L 616.457182 311.24 
+L 616.457182 311.224103 
+L 599.126091 311.224103 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_29">
+    <path clip-path="url(#pbc74eb3604)" d="M 616.457182 311.24 
+L 633.788273 311.24 
+L 633.788273 311.232052 
+L 616.457182 311.232052 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_30">
+    <path clip-path="url(#pbc74eb3604)" d="M 633.788273 311.24 
+L 651.119364 311.24 
+L 651.119364 311.24 
+L 633.788273 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_31">
+    <path clip-path="url(#pbc74eb3604)" d="M 651.119364 311.24 
+L 668.450455 311.24 
+L 668.450455 311.24 
+L 651.119364 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_32">
+    <path clip-path="url(#pbc74eb3604)" d="M 668.450455 311.24 
+L 685.781545 311.24 
+L 685.781545 311.236821 
+L 668.450455 311.236821 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_33">
+    <path clip-path="url(#pbc74eb3604)" d="M 685.781545 311.24 
+L 703.112636 311.24 
+L 703.112636 311.24 
+L 685.781545 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_34">
+    <path clip-path="url(#pbc74eb3604)" d="M 703.112636 311.24 
+L 720.443727 311.24 
+L 720.443727 311.24 
+L 703.112636 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_35">
+    <path clip-path="url(#pbc74eb3604)" d="M 720.443727 311.24 
+L 737.774818 311.24 
+L 737.774818 311.24 
+L 720.443727 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_36">
+    <path clip-path="url(#pbc74eb3604)" d="M 737.774818 311.24 
+L 755.105909 311.24 
+L 755.105909 311.24 
+L 737.774818 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_37">
+    <path clip-path="url(#pbc74eb3604)" d="M 755.105909 311.24 
+L 772.437 311.24 
+L 772.437 311.23841 
+L 755.105909 311.23841 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_38">
+    <path clip-path="url(#pbc74eb3604)" d="M 772.437 311.24 
+L 789.768091 311.24 
+L 789.768091 311.24 
+L 772.437 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_39">
+    <path clip-path="url(#pbc74eb3604)" d="M 789.768091 311.24 
+L 807.099182 311.24 
+L 807.099182 311.24 
+L 789.768091 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_40">
+    <path clip-path="url(#pbc74eb3604)" d="M 807.099182 311.24 
+L 824.430273 311.24 
+L 824.430273 311.24 
+L 807.099182 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_41">
+    <path clip-path="url(#pbc74eb3604)" d="M 824.430273 311.24 
+L 841.761364 311.24 
+L 841.761364 311.24 
+L 824.430273 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_42">
+    <path clip-path="url(#pbc74eb3604)" d="M 841.761364 311.24 
+L 859.092455 311.24 
+L 859.092455 311.24 
+L 841.761364 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_43">
+    <path clip-path="url(#pbc74eb3604)" d="M 859.092455 311.24 
+L 876.423545 311.24 
+L 876.423545 311.24 
+L 859.092455 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_44">
+    <path clip-path="url(#pbc74eb3604)" d="M 876.423545 311.24 
+L 893.754636 311.24 
+L 893.754636 311.24 
+L 876.423545 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_45">
+    <path clip-path="url(#pbc74eb3604)" d="M 893.754636 311.24 
+L 911.085727 311.24 
+L 911.085727 311.24 
+L 893.754636 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_46">
+    <path clip-path="url(#pbc74eb3604)" d="M 911.085727 311.24 
+L 928.416818 311.24 
+L 928.416818 311.24 
+L 911.085727 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_47">
+    <path clip-path="url(#pbc74eb3604)" d="M 928.416818 311.24 
+L 945.747909 311.24 
+L 945.747909 311.24 
+L 928.416818 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_48">
+    <path clip-path="url(#pbc74eb3604)" d="M 945.747909 311.24 
+L 963.079 311.24 
+L 963.079 311.24 
+L 945.747909 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_49">
+    <path clip-path="url(#pbc74eb3604)" d="M 963.079 311.24 
+L 980.410091 311.24 
+L 980.410091 311.24 
+L 963.079 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_50">
+    <path clip-path="url(#pbc74eb3604)" d="M 980.410091 311.24 
+L 997.741182 311.24 
+L 997.741182 311.24 
+L 980.410091 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_51">
+    <path clip-path="url(#pbc74eb3604)" d="M 997.741182 311.24 
+L 1015.072273 311.24 
+L 1015.072273 311.23841 
+L 997.741182 311.23841 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path d="M 0 0 
+L 0 3.5 
+" id="mf05b7e26d8" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="123.979839" xlink:href="#mf05b7e26d8" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 123.979839, 333.436875)" x="123.979839" y="333.436875">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="317.191555" xlink:href="#mf05b7e26d8" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 317.191555, 333.436875)" x="317.191555" y="333.436875">1000</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="510.403271" xlink:href="#mf05b7e26d8" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 510.403271, 333.436875)" x="510.403271" y="333.436875">2000</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="703.614987" xlink:href="#mf05b7e26d8" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 703.614987, 333.436875)" x="703.614987" y="333.436875">3000</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="896.826703" xlink:href="#mf05b7e26d8" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 896.826703, 333.436875)" x="896.826703" y="333.436875">4000</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 581.795, 356.793125)" x="581.795" y="356.793125">Read length</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6">
+      <defs>
+       <path d="M 0 0 
+L -3.5 0 
+" id="m6c6fc6238d" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#m6c6fc6238d" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 318.838437)" x="98.19" y="318.838437">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#m6c6fc6238d" y="231.756004"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 239.354441)" x="98.19" y="239.354441">50000</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_8">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#m6c6fc6238d" y="152.272008"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 159.870445)" x="98.19" y="159.870445">100000</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#m6c6fc6238d" y="72.788011"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 80.386449)" x="98.19" y="80.386449">150000</text>
+     </g>
+    </g>
+    <g id="text_11">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-90, 13.680625, 166.42)" x="13.680625" y="166.42">Count</text>
+    </g>
+   </g>
+   <g id="line2d_10">
+    <path clip-path="url(#pbc74eb3604)" d="M 220.585697 311.24 
+L 220.585697 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="line2d_11">
+    <path clip-path="url(#pbc74eb3604)" d="M 317.191555 311.24 
+L 317.191555 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="patch_52">
+    <path d="M 105.19 311.24 
+L 105.19 21.6 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+   <g id="patch_53">
+    <path d="M 105.19 311.24 
+L 1058.4 311.24 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pbc74eb3604">
+   <rect height="289.64" width="953.21" x="105.19" y="21.6"/>
+  </clipPath>
+ </defs>
+</svg>
+
+                </div>
+            <script type="text/javascript">
+            exportImageSVG("#total_classified_svg","#total_classified", "total_classified_chart");
+            </script>
+            <script type="text/javascript">
+            exportImagePNG("#total_classified_png","#total_classified", "total_classified_chart");
+            </script>
+            
+                <h3><strong>Figure 1</strong> | Read length distribution plot for Sequence ID barcode55</h3>
+                <hr>        
+        <h2>2. Classification of unfiltered reads</h2>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2022/barcode55/krona.unfiltered.html">Go to read classifications.</a></p>
+
+        <h2>3. Filtered sequencing reads</h2>
+        <p><strong>Min length:</strong> 500 </p>
+        <p><strong>Max length:</strong> 1000 </p>
+        <p><strong>Read count post filtering:</strong> 200983 </p>
+        <p><strong>Reads classified post filtering:</strong> 199996 </p>
+        <p><strong>Proportion of reads classified:</strong> 1.0 </p>
+        
+        <br>
+        <button class="accordion">Export image</button>
+            <div class="panel">
+            <div class="row">
+                <div class="column">
+                <button id="total_classified_svg">SVG</button>
+                </div>
+                <div class="column">
+                <button id="total_classified_png">PNG</button>
+                </div>
+            </div>
+            </div>
+            <div id="total_classified">
+            <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="360pt" version="1.1" viewBox="0 0 1080 360" width="1080pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2022-10-13T17:02:09.632665</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.3.4, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linecap:butt;stroke-linejoin:round;}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="axes_1">
+   <g id="patch_1">
+    <path d="M 92.41 311.24 
+L 1058.4 311.24 
+L 1058.4 21.6 
+L 92.41 21.6 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g id="patch_2">
+    <path clip-path="url(#p9ce2077727)" d="M 136.318636 311.24 
+L 153.882091 311.24 
+L 153.882091 310.620607 
+L 136.318636 310.620607 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p9ce2077727)" d="M 153.882091 311.24 
+L 171.445545 311.24 
+L 171.445545 310.699439 
+L 153.882091 310.699439 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p9ce2077727)" d="M 171.445545 311.24 
+L 189.009 311.24 
+L 189.009 310.500482 
+L 171.445545 310.500482 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p9ce2077727)" d="M 189.009 311.24 
+L 206.572455 311.24 
+L 206.572455 310.725716 
+L 189.009 310.725716 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#p9ce2077727)" d="M 206.572455 311.24 
+L 224.135909 311.24 
+L 224.135909 310.819564 
+L 206.572455 310.819564 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p9ce2077727)" d="M 224.135909 311.24 
+L 241.699364 311.24 
+L 241.699364 310.879626 
+L 224.135909 310.879626 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#p9ce2077727)" d="M 241.699364 311.24 
+L 259.262818 311.24 
+L 259.262818 310.902149 
+L 241.699364 310.902149 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#p9ce2077727)" d="M 259.262818 311.24 
+L 276.826273 311.24 
+L 276.826273 310.887134 
+L 259.262818 310.887134 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#p9ce2077727)" d="M 276.826273 311.24 
+L 294.389727 311.24 
+L 294.389727 310.827071 
+L 276.826273 310.827071 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#p9ce2077727)" d="M 294.389727 311.24 
+L 311.953182 311.24 
+L 311.953182 310.650638 
+L 294.389727 310.650638 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#p9ce2077727)" d="M 311.953182 311.24 
+L 329.516636 311.24 
+L 329.516636 310.211432 
+L 311.953182 310.211432 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#p9ce2077727)" d="M 329.516636 311.24 
+L 347.080091 311.24 
+L 347.080091 310.639376 
+L 329.516636 310.639376 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#p9ce2077727)" d="M 347.080091 311.24 
+L 364.643545 311.24 
+L 364.643545 310.93218 
+L 347.080091 310.93218 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#p9ce2077727)" d="M 364.643545 311.24 
+L 382.207 311.24 
+L 382.207 310.954704 
+L 364.643545 310.954704 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_16">
+    <path clip-path="url(#p9ce2077727)" d="M 382.207 311.24 
+L 399.770455 311.24 
+L 399.770455 310.913411 
+L 382.207 310.913411 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_17">
+    <path clip-path="url(#p9ce2077727)" d="M 399.770455 311.24 
+L 417.333909 311.24 
+L 417.333909 310.849595 
+L 399.770455 310.849595 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_18">
+    <path clip-path="url(#p9ce2077727)" d="M 417.333909 311.24 
+L 434.897364 311.24 
+L 434.897364 310.909657 
+L 417.333909 310.909657 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_19">
+    <path clip-path="url(#p9ce2077727)" d="M 434.897364 311.24 
+L 452.460818 311.24 
+L 452.460818 310.748239 
+L 434.897364 310.748239 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_20">
+    <path clip-path="url(#p9ce2077727)" d="M 452.460818 311.24 
+L 470.024273 311.24 
+L 470.024273 310.496728 
+L 452.460818 310.496728 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_21">
+    <path clip-path="url(#p9ce2077727)" d="M 470.024273 311.24 
+L 487.587727 311.24 
+L 487.587727 310.335311 
+L 470.024273 310.335311 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_22">
+    <path clip-path="url(#p9ce2077727)" d="M 487.587727 311.24 
+L 505.151182 311.24 
+L 505.151182 310.793286 
+L 487.587727 310.793286 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_23">
+    <path clip-path="url(#p9ce2077727)" d="M 505.151182 311.24 
+L 522.714636 311.24 
+L 522.714636 310.909657 
+L 505.151182 310.909657 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_24">
+    <path clip-path="url(#p9ce2077727)" d="M 522.714636 311.24 
+L 540.278091 311.24 
+L 540.278091 310.868364 
+L 522.714636 310.868364 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_25">
+    <path clip-path="url(#p9ce2077727)" d="M 540.278091 311.24 
+L 557.841545 311.24 
+L 557.841545 310.879626 
+L 540.278091 310.879626 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_26">
+    <path clip-path="url(#p9ce2077727)" d="M 557.841545 311.24 
+L 575.405 311.24 
+L 575.405 310.853349 
+L 557.841545 310.853349 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_27">
+    <path clip-path="url(#p9ce2077727)" d="M 575.405 311.24 
+L 592.968455 311.24 
+L 592.968455 310.789532 
+L 575.405 310.789532 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_28">
+    <path clip-path="url(#p9ce2077727)" d="M 592.968455 311.24 
+L 610.531909 311.24 
+L 610.531909 310.676915 
+L 592.968455 310.676915 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_29">
+    <path clip-path="url(#p9ce2077727)" d="M 610.531909 311.24 
+L 628.095364 311.24 
+L 628.095364 310.568052 
+L 610.531909 310.568052 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_30">
+    <path clip-path="url(#p9ce2077727)" d="M 628.095364 311.24 
+L 645.658818 311.24 
+L 645.658818 310.155124 
+L 628.095364 310.155124 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_31">
+    <path clip-path="url(#p9ce2077727)" d="M 645.658818 311.24 
+L 663.222273 311.24 
+L 663.222273 309.565762 
+L 645.658818 309.565762 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_32">
+    <path clip-path="url(#p9ce2077727)" d="M 663.222273 311.24 
+L 680.785727 311.24 
+L 680.785727 308.510917 
+L 663.222273 308.510917 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_33">
+    <path clip-path="url(#p9ce2077727)" d="M 680.785727 311.24 
+L 698.349182 311.24 
+L 698.349182 305.53783 
+L 680.785727 305.53783 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_34">
+    <path clip-path="url(#p9ce2077727)" d="M 698.349182 311.24 
+L 715.912636 311.24 
+L 715.912636 297.714709 
+L 698.349182 297.714709 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_35">
+    <path clip-path="url(#p9ce2077727)" d="M 715.912636 311.24 
+L 733.476091 311.24 
+L 733.476091 277.717699 
+L 715.912636 277.717699 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_36">
+    <path clip-path="url(#p9ce2077727)" d="M 733.476091 311.24 
+L 751.039545 311.24 
+L 751.039545 242.750148 
+L 733.476091 242.750148 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_37">
+    <path clip-path="url(#p9ce2077727)" d="M 751.039545 311.24 
+L 768.603 311.24 
+L 768.603 158.557744 
+L 751.039545 158.557744 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_38">
+    <path clip-path="url(#p9ce2077727)" d="M 768.603 311.24 
+L 786.166455 311.24 
+L 786.166455 35.392381 
+L 768.603 35.392381 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_39">
+    <path clip-path="url(#p9ce2077727)" d="M 786.166455 311.24 
+L 803.729909 311.24 
+L 803.729909 162.274102 
+L 786.166455 162.274102 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_40">
+    <path clip-path="url(#p9ce2077727)" d="M 803.729909 311.24 
+L 821.293364 311.24 
+L 821.293364 286.336647 
+L 803.729909 286.336647 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_41">
+    <path clip-path="url(#p9ce2077727)" d="M 821.293364 311.24 
+L 838.856818 311.24 
+L 838.856818 306.562644 
+L 821.293364 306.562644 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_42">
+    <path clip-path="url(#p9ce2077727)" d="M 838.856818 311.24 
+L 856.420273 311.24 
+L 856.420273 309.276712 
+L 838.856818 309.276712 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_43">
+    <path clip-path="url(#p9ce2077727)" d="M 856.420273 311.24 
+L 873.983727 311.24 
+L 873.983727 309.956167 
+L 856.420273 309.956167 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_44">
+    <path clip-path="url(#p9ce2077727)" d="M 873.983727 311.24 
+L 891.547182 311.24 
+L 891.547182 310.301526 
+L 873.983727 310.301526 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_45">
+    <path clip-path="url(#p9ce2077727)" d="M 891.547182 311.24 
+L 909.110636 311.24 
+L 909.110636 310.556791 
+L 891.547182 310.556791 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_46">
+    <path clip-path="url(#p9ce2077727)" d="M 909.110636 311.24 
+L 926.674091 311.24 
+L 926.674091 310.785778 
+L 909.110636 310.785778 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_47">
+    <path clip-path="url(#p9ce2077727)" d="M 926.674091 311.24 
+L 944.237545 311.24 
+L 944.237545 310.838333 
+L 926.674091 310.838333 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_48">
+    <path clip-path="url(#p9ce2077727)" d="M 944.237545 311.24 
+L 961.801 311.24 
+L 961.801 310.909657 
+L 944.237545 310.909657 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_49">
+    <path clip-path="url(#p9ce2077727)" d="M 961.801 311.24 
+L 979.364455 311.24 
+L 979.364455 310.928427 
+L 961.801 310.928427 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_50">
+    <path clip-path="url(#p9ce2077727)" d="M 979.364455 311.24 
+L 996.927909 311.24 
+L 996.927909 311.052305 
+L 979.364455 311.052305 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_51">
+    <path clip-path="url(#p9ce2077727)" d="M 996.927909 311.24 
+L 1014.491364 311.24 
+L 1014.491364 311.007258 
+L 996.927909 311.007258 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path d="M 0 0 
+L 0 3.5 
+" id="m3fb12996f5" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="134.555237" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 134.555237, 333.436875)" x="134.555237" y="333.436875">500</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="310.895142" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 310.895142, 333.436875)" x="310.895142" y="333.436875">600</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="487.235047" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 487.235047, 333.436875)" x="487.235047" y="333.436875">700</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="663.574953" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 663.574953, 333.436875)" x="663.574953" y="333.436875">800</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="839.914858" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 839.914858, 333.436875)" x="839.914858" y="333.436875">900</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="1016.254763" xlink:href="#m3fb12996f5" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 1016.254763, 333.436875)" x="1016.254763" y="333.436875">1000</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 575.405, 356.793125)" x="575.405" y="356.793125">Read length</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <defs>
+       <path d="M 0 0 
+L -3.5 0 
+" id="m9c6d5d081b" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#m9c6d5d081b" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 318.838437)" x="85.41" y="318.838437">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#m9c6d5d081b" y="236.162058"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 243.760496)" x="85.41" y="243.760496">20000</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#m9c6d5d081b" y="161.084117"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 168.682554)" x="85.41" y="168.682554">40000</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_10">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#m9c6d5d081b" y="86.006175"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 93.604613)" x="85.41" y="93.604613">60000</text>
+     </g>
+    </g>
+    <g id="text_12">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-90, 13.625625, 166.42)" x="13.625625" y="166.42">Count</text>
+    </g>
+   </g>
+   <g id="line2d_11">
+    <path clip-path="url(#p9ce2077727)" d="M 134.555237 311.24 
+L 134.555237 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="line2d_12">
+    <path clip-path="url(#p9ce2077727)" d="M 1016.254763 311.24 
+L 1016.254763 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="patch_52">
+    <path d="M 92.41 311.24 
+L 92.41 21.6 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+   <g id="patch_53">
+    <path d="M 92.41 311.24 
+L 1058.4 311.24 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9ce2077727">
+   <rect height="289.64" width="965.99" x="92.41" y="21.6"/>
+  </clipPath>
+ </defs>
+</svg>
+
+            </div>
+        <script type="text/javascript">
+        exportImageSVG("#total_classified_svg","#total_classified", "total_classified_chart");
+        </script>
+        <script type="text/javascript">
+        exportImagePNG("#total_classified_png","#total_classified", "total_classified_chart");
+        </script>
+        
+        <h3><strong>Figure 2</strong> | Filtered read length distribution plot for sequence id barcode55</h3>
+                <hr>  
+        <h2>4. Classification of filtered reads</h2>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2022/barcode55/krona.filtered.html">Go to read classifications.</a></p>
+        
+        <h2>5. Taxa with consensus sequences generated.</h2>
+        <p><strong>Note:</strong> consensus generation was run for taxa with more than 50 classified reads between 500-1000 base pairs in length. 
+            A sequence may not be available if the group of reads for a given taxonomic id were too diverse.</p>
+        <br>
+        <h3><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2022/barcode55/consensus_sequences">Go to consensus sequences.</a></h3>
+
+        <h3><strong>Table 1</strong> | Summary of taxa in sample </h3>
+          <button class="accordion">Table options</button>
+          <div class="panel">
+            <div class="row">
+              <div class="col-sm-2">
+                <strong>Show columns:</strong>
+              </div>
+
+              
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="0" style="color:#419595">Taxid</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="1" style="color:#419595">Taxon</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="2" style="color:#419595">Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="3" style="color:#419595">Sub Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="4" style="color:#419595">Pcent Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="5" style="color:#419595">Consensus Available</a> 
+                </div>
+                
+
+          </div>
+          <div class="row">
+            <div class="col-sm-2" ><strong>Export table: </strong></div>
+            <div class="col-sm-8" id="tableExportID"></div>
+          </div>
+          </div>
+          <table class="display nowrap" id="myTable">
+            <thead>
+              <tr>
+              <th style="width:10%;">Taxid</th>
+              <th style="width:10%;">Taxon</th>
+              <th style="width:10%;">Reads</th>
+              <th style="width:10%;">Sub Reads</th>
+              <th style="width:10%;">Pcent Reads</th>
+              <th style="width:10%;">Consensus Available</th>
+              </tr>
+            </thead>
+            <tbody>
+                  <tr>
+                      <td>7496</td>
+                      <td>Pterygota</td>
+                      <td>241</td>
+                      <td>199845</td>
+                      <td> 99.43</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>189838</td>
+                      <td>Baetis</td>
+                      <td>160009</td>
+                      <td>180820</td>
+                      <td> 89.97</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>189839</td>
+                      <td>Baetis rhodani</td>
+                      <td>13550</td>
+                      <td>13550</td>
+                      <td>  6.74</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2488499</td>
+                      <td>Baetis tricaudatus complex sp. A BG-2018</td>
+                      <td>2344</td>
+                      <td>2344</td>
+                      <td>  1.17</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1337175</td>
+                      <td>Baetis sp. CA1</td>
+                      <td>1713</td>
+                      <td>1713</td>
+                      <td>  0.85</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>603485</td>
+                      <td>Baetis adonis</td>
+                      <td>1651</td>
+                      <td>1651</td>
+                      <td>  0.82</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>248215</td>
+                      <td>Baetis tricaudatus</td>
+                      <td>736</td>
+                      <td>736</td>
+                      <td>  0.37</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>603491</td>
+                      <td>Baetis hudsonicus</td>
+                      <td>332</td>
+                      <td>332</td>
+                      <td>  0.17</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>603495</td>
+                      <td>Baetis persecutor</td>
+                      <td>102</td>
+                      <td>102</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>996919</td>
+                      <td>Baetis melanonyx</td>
+                      <td>96</td>
+                      <td>96</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>429108</td>
+                      <td>Baetis liebenauae</td>
+                      <td>72</td>
+                      <td>72</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>248213</td>
+                      <td>Baetis flavistriga</td>
+                      <td>53</td>
+                      <td>53</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>33392</td>
+                      <td>Endopterygota</td>
+                      <td>303</td>
+                      <td>18650</td>
+                      <td>  9.28</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7147</td>
+                      <td>Diptera</td>
+                      <td>333</td>
+                      <td>15925</td>
+                      <td>  7.92</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>480117</td>
+                      <td>Cyclorrhapha</td>
+                      <td>144</td>
+                      <td>14924</td>
+                      <td>  7.43</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>43737</td>
+                      <td>Aschiza</td>
+                      <td>185</td>
+                      <td>14246</td>
+                      <td>  7.09</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>34680</td>
+                      <td>Syrphidae</td>
+                      <td>8477</td>
+                      <td>13981</td>
+                      <td>  6.96</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>43838</td>
+                      <td>Syrphinae</td>
+                      <td>536</td>
+                      <td>3586</td>
+                      <td>  1.78</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>115274</td>
+                      <td>Syrphini</td>
+                      <td>166</td>
+                      <td>2113</td>
+                      <td>  1.05</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>224255</td>
+                      <td>Syrphus</td>
+                      <td>97</td>
+                      <td>1002</td>
+                      <td>  0.50</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>224256</td>
+                      <td>Syrphus vitripennis</td>
+                      <td>404</td>
+                      <td>404</td>
+                      <td>  0.20</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1124549</td>
+                      <td>Syrphus ribesii</td>
+                      <td>390</td>
+                      <td>390</td>
+                      <td>  0.19</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1694954</td>
+                      <td>Syrphus sp. BOLD:AAA4570</td>
+                      <td>54</td>
+                      <td>54</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>414800</td>
+                      <td>Dasysyrphus</td>
+                      <td>66</td>
+                      <td>525</td>
+                      <td>  0.26</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>471466</td>
+                      <td>Dasysyrphus pauxillus</td>
+                      <td>162</td>
+                      <td>162</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>471506</td>
+                      <td>Dasysyrphus venustus</td>
+                      <td>137</td>
+                      <td>137</td>
+                      <td>  0.07</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1124509</td>
+                      <td>Dasysyrphus bilineatus</td>
+                      <td>90</td>
+                      <td>90</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>414832</td>
+                      <td>Meligramma triangulifera</td>
+                      <td>151</td>
+                      <td>151</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1743521</td>
+                      <td>Syrphinae sp. BOLD:AAB2384</td>
+                      <td>639</td>
+                      <td>639</td>
+                      <td>  0.32</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2636996</td>
+                      <td>unclassified Pipiza</td>
+                      <td>75</td>
+                      <td>75</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1458306</td>
+                      <td>Leucopodella sp. BOLD:AAZ6175</td>
+                      <td>91</td>
+                      <td>91</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2662111</td>
+                      <td>Psilota femoralis</td>
+                      <td>1360</td>
+                      <td>1360</td>
+                      <td>  0.68</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1890886</td>
+                      <td>Volucella sp. BOLD-2016</td>
+                      <td>141</td>
+                      <td>141</td>
+                      <td>  0.07</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1291931</td>
+                      <td>Spilogona arctica</td>
+                      <td>83</td>
+                      <td>83</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7149</td>
+                      <td>Chironomidae</td>
+                      <td>79</td>
+                      <td>258</td>
+                      <td>  0.13</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>329961</td>
+                      <td>unclassified Cecidomyiidae</td>
+                      <td>108</td>
+                      <td>188</td>
+                      <td>  0.09</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7402</td>
+                      <td>Braconidae</td>
+                      <td>240</td>
+                      <td>1432</td>
+                      <td>  0.71</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1045688</td>
+                      <td>Baeacis sp. 2 BOLD:AAR4186</td>
+                      <td>480</td>
+                      <td>480</td>
+                      <td>  0.24</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1045728</td>
+                      <td>Taphaeus sp. 1 BOLD:AAQ3729</td>
+                      <td>175</td>
+                      <td>175</td>
+                      <td>  0.09</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1045689</td>
+                      <td>unclassified Brachistinae</td>
+                      <td>72</td>
+                      <td>189</td>
+                      <td>  0.09</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2285124</td>
+                      <td>Brachistinae sp. BIOUG21034-D06</td>
+                      <td>113</td>
+                      <td>113</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>34695</td>
+                      <td>Myrmicinae</td>
+                      <td>69</td>
+                      <td>84</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>27532</td>
+                      <td>Tenthredinidae</td>
+                      <td>53</td>
+                      <td>181</td>
+                      <td>  0.09</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>520955</td>
+                      <td>Macrophya</td>
+                      <td>54</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>433162</td>
+                      <td>unclassified Coccinellidae</td>
+                      <td>184</td>
+                      <td>192</td>
+                      <td>  0.10</td>
+                      <td>False</td>
+                  </tr>
+              </tbody>
+            </table>
+            
+            <script type="text/javascript">
+              $(document).ready( function () {
+                  var table = $('#myTable').DataTable({
+                    "scrollY": "300px",
+                    "paging": false,
+                    "border-bottom":false,
+                    dom: 'frtip',
+                    buttons: ["copy","csv","print"]
+                  });
+                  table.buttons().container().appendTo( $('#tableExportID') );
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+    
+                } );
+            </script>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+              acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                  panel.style.maxHeight = null;
+                } else {
+                  panel.style.maxHeight = panel.scrollHeight*1.2 + "px";
+                } 
+              });
+            }
+    </script>
+
+    <footer class="page-footer">
+      <div class="container-fluid text-right text-md-right">
+        <hr>
+        <div class="row">
+        </div>
+
+      <div class="col-sm-11" style="text-align: right;">
+        ADE3 | <small class="text-muted">Animal diversity and evolution</small> <br><small class="text-muted">GNU General Public License v3.0</small></div>
+
+        <br><br>
+        </p>
+      </div>
+    </footer>
+    </div>
+  </body>
+</html>

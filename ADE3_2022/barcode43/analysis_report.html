@@ -1,0 +1,3406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://raw.githubusercontent.com/cov-ert/civet/master/docs/virus.svg">
+
+    <title>ADE3 2022 barcode43</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rambaut/figtree.js@9880/dist/figtree.umd.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://sharonchoong.github.io/svg-exportJS/svg-export.min.js"></script>
+    <script src="https://unpkg.com/canvg/lib/umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfkit/js/pdfkit.min.js"></script>
+    <script src="https://github.com/devongovett/blob-stream/releases/download/v0.1.3/blob-stream.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-to-pdfkit/source.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.16.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.15.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.11.1"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+      body {
+        padding-top: 50px;
+        font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      }
+      table text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+      }
+      header {
+          display: block;
+          text-align: right;
+      
+      }
+      svg {width: 90%; height: auto;}
+      .row {
+          display: flex;
+        }
+        .column {
+          padding: 10px;
+          flex: 50%;
+        }
+      .accordion {
+          background-color: #eee;
+          color: #444;
+          cursor: pointer;
+          padding: 13px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+          background-color: #419595;
+          color: white;
+        }
+
+        .accordion:after {
+          content: '\002B';
+          color: white;
+          font-weight: bold;
+          float: right;
+          margin-left: 5px;
+        }
+
+        .active:after {
+          content: "\2212";
+        }
+
+        .panel {
+          padding: 0 13px;
+          background-color: white;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+        }
+      .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+          }
+      .node-background{
+          fill:dimgrey;
+          stroke:dimgrey;
+      }
+      .node circle{
+        stroke-width:0;
+        cursor:pointer;
+        /* fill:#7178bc; */
+        stroke:dimgrey;
+        }
+      .node circle.selected{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#419595;
+        stroke:dimgrey;
+        }
+      .node-background.query_boolean-True{
+          stroke:#419595;
+      }
+      .node.query_boolean-True circle{
+        stroke:#419595;
+      }
+      .node.query_boolean-True circle.selected{
+        stroke:#419595;
+      }
+      .node-background.query_boolean-True circle.selected{
+          stroke:#419595;
+      }
+      .node.query_boolean-True.hovered circle{
+          stroke:#419595;
+      }
+      .node rect{
+        stroke-width:2;
+        fill:#419595;
+        stroke:dimgrey;
+      }
+      .svg-tooltip {
+          background: rgba(69,77,93,.9);
+          border-radius: .1rem;
+          color: #fff;
+          display: block;
+          font-size: 14px;
+          max-width: 320px;
+          padding: .2rem .4rem;
+          position: absolute;
+          text-overflow: ellipsis;
+          white-space: pre;
+          z-index: 300;
+          visibility: hidden;
+    }
+    .tooltip-header {
+      font-size: 1.3em;
+    }
+    .tooltip-key {
+      font-weight: bold;
+    }
+    .branch path{
+      stroke-width:2;
+      stroke: dimgrey;
+      stroke-linejoin:round;
+      cursor: pointer;
+      }
+      .branch.hovered path{
+        stroke-width:4;
+        stroke: dimgrey;
+      }
+        .node.hovered circle{
+        stroke-width:5;
+        stroke: dimgrey
+        }
+        .node text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+          font-weight: 300;
+          font-size: 0.9em;
+        }
+      /* .starter-template {
+        padding: 40px 15px;
+        text-align: left;
+      } */
+      .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        border-top: 1px solid  rgb(148, 148, 148);
+        border-bottom: none;
+      }
+      .svg-icon {
+      display: inline-flex;
+      align-self: center;
+      }
+      h3{
+          font-size: 1em;
+      }
+      #toTopBtn {
+      position: fixed;
+      bottom: 26px;
+      right: 39px;
+      z-index: 98;
+      padding: 21px;
+      background-color: #419595
+      }
+      .js .cd-top--fade-out {
+          opacity: .5
+      }
+      .js .cd-top--is-visible {
+          visibility: visible;
+          opacity: 1
+      }
+      .js .cd-top {
+          visibility: hidden;
+          opacity: 0;
+          transition: opacity .3s, visibility .3s, background-color .3s
+      }
+      .cd-top {
+          position: fixed;
+          bottom: 20px;
+          bottom: var(--cd-back-to-top-margin);
+          right: 20px;
+          right: var(--cd-back-to-top-margin);
+          display: inline-block;
+          height: 40px;
+          height: var(--cd-back-to-top-size);
+          width: 40px;
+          width: var(--cd-back-to-top-size);
+          box-shadow: 0 0 10px rgba(0, 0, 0, .05) !important;
+          background: url(https://res.cloudinary.com/dxfq3iotg/image/upload/v1571057658/cd-top-arrow.svg) no-repeat center 50%;
+          background-color: #419595;
+          background-color: hsla(var(--cd-color-3-h), var(--cd-color-3-s), var(--cd-color-3-l), 0.8)
+      }
+      .slidecontainer {
+        width: 100%;
+      }
+      .colourSelect {
+        background: #eee;
+        border-radius: 5px;
+        padding: 4px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+      }
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        background: #d3d3d3;
+        border-radius: 5px;
+        stroke: dimgrey;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      .slider:hover {
+        opacity: 1; 
+      }
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%; 
+        background: #419595;
+        stroke: dimgrey;
+        cursor: pointer;
+      }
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        stroke: dimgrey;
+        background: #419595;
+        cursor: pointer;
+      } 
+      .tree-container{
+        max-height: 1000px;
+        overflow: scroll;
+      }
+      .label{
+        display: none;
+      }
+      .label.show{
+        display: inline;
+      }
+      .node.hovered .label {
+          display:inline;
+        }
+      div.sticky {
+          position: -webkit-sticky; /* Safari */
+          position: sticky;
+          top: 0;
+        }
+        .searchbar {
+          border-style:solid; 
+          border-color: lightgrey; 
+          border-radius: 5px; 
+          float:right
+        }
+      @media print {
+        .tree-container{
+        max-height: none;
+        overflow: visible;
+        
+        }
+        
+        .slider-block {
+          display: none;
+        }
+        .container {
+        padding-right: 1.5cm;
+        padding-left: 1.5cm;
+        padding-bottom: 1.5cm;
+        margin: 1cm;
+        min-width: 2200px;
+        font-size:2.5vw;
+        }
+        .searchbar {
+          display: none;
+        }
+        h3{ 
+          font-size: 2.5vw;
+        }
+        h2 {
+          font-size: 4vw;
+          padding: 1cm;
+        }
+        h1 {
+          font-size: 5vw;
+        }
+        .command-block {
+          display: none;
+        }
+        pre {
+          display: none;
+        }
+        .civet-logo {
+          width: 2cm;
+          height: 2cm;
+        }
+        .tree_svg {
+          width: 1200px
+        }
+        .page-footer {
+          display: none;
+        }
+        .civet-header {
+          text-align: left;
+        }
+        .content-block, p {
+        page-break-inside: avoid;
+        }
+      }
+      @media screen and (prefers-color-scheme: dark) {
+        body {
+            background-color: #17141F;
+            color: #F2E7DC;
+            opacity: 0.95;
+          }
+          img {
+            filter: brightness(.8) contrast(1.2);
+          }
+        .component {
+          background-color: #2C2640;
+        }
+        .table-striped>tbody>tr:nth-child(odd) {
+          background-color: #2C2640;
+          /* border-top-color: #3B325B; */
+          /* border-color: #2C2640; */
+          opacity: 0.9;
+        }
+        .table {
+          border-top: 0px;
+          /* border-color: #3B325B; */
+          background-color: #17141F;
+      }
+      .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        border-top: none;
+      }
+      .accordion {
+          background-color: #2C2640;
+          color: #F2E7DC;
+          cursor: pointer;
+          padding: 12px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+          background-color: #17141F;
+        }
+
+        .accordion:after {
+          content: '\002B';
+          color: #F2E7DC;
+          font-weight: bold;
+          float: right;
+          margin-left: 5px;
+        }
+
+        .active:after {
+          content: "\2212";
+        }
+
+        .panel {
+          padding: 0 12px;
+          background-color: #2C2640;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+        }
+      pre {
+        background-color: #3B325B;
+        color: #F2E7DC;
+        border: none;
+        opacity: 0.8;
+      }
+      .searchbar {
+        background-color: #3B325B;
+        color: #F2E7DC;
+        border-style:none;
+        opacity: 0.8;
+        }
+      .slider {
+        background: #F2E7DC;
+        stroke: #F2E7DC;
+      }
+      .slider::-webkit-slider-thumb {
+        background: #5F9C82;
+        fill: #5F9C82;
+        stroke: #F2E7DC;
+      }
+      .slider::-moz-range-thumb {
+        stroke: #F2E7DC;
+        background: #5F9C82;
+        fill: #5F9C82;
+      } 
+      .node-background{
+          fill:#F2E7DC;
+          stroke:#F2E7DC;
+          opacity: 0.85;
+      }
+      .node circle{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#5F9C82;
+        stroke:#F2E7DC;
+        
+        }
+      .node circle.selected{
+        stroke-width:0;
+        cursor:pointer;
+        fill:#E27E7E;
+        stroke:#F2E7DC;
+        opacity: 1;
+        }
+      .node rect{
+        stroke-width:2;
+        fill:#E27E7E;
+        stroke:#F2E7DC;
+      }
+      .svg-tooltip {
+          background: rgba(69,77,93,.9);
+          color: #F2E7DC;
+    }
+    .branch path{
+      stroke: #F2E7DC;
+      opacity: 0.85;
+      }
+      .branch.hovered path{
+        stroke:#F2E7DC;
+        opacity: 1;
+      }
+        .node.hovered circle{
+          stroke:#F2E7DC;
+        opacity: 1;
+        }
+        .node text{
+          font-family: "ArialNova-Light","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+          font-weight: 300;
+          font-size: 0.9em;
+          color: #F2E7DC;
+          fill: #F2E7DC;        
+        }
+        .scale-bar line {
+          stroke: #F2E7DC;
+        }
+        .scale-bar text{
+          fill: #F2E7DC;
+          color:  #F2E7DC;
+        }
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <script>
+      $(document).ready(function() {
+        $(window).scroll(function() {
+        if ($(this).scrollTop() > 20) {
+        $('#toTopBtn').fadeIn();
+        } else {
+        $('#toTopBtn').fadeOut();
+        }
+        });
+        
+        $('#toTopBtn').click(function() {
+        $("html, body").animate({
+        scrollTop: 0
+        }, 400);
+        return false;
+        });
+        });
+    </script>
+
+<script>
+  function exportImageSVG(buttonID,svgID,name){
+      document.querySelector(buttonID).onclick = function(){
+          svgExport.downloadSvg(document.querySelector(svgID), name);
+      };
+  };
+  function exportImagePNG(buttonID,svgID,name){
+      document.querySelector(buttonID).onclick = function(){
+          svgExport.downloadPng(document.querySelector(svgID), name);
+      };
+  };
+</script>
+    <div class="container">
+      <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
+      <div>
+        <header class="civet-header">
+            ADE3 | 
+            <small class="text-muted">Animal diversity and evolution 3</small>
+            <hr>
+        </header>
+        
+        <h1>ADE3 barcode43
+            <small class="text-muted" style="color:#419595">2022-10-14</small>
+        </h1> 
+        <hr>
+        <br>
+        </div>
+    <br>
+
+        <h2>1. All sequencing reads</h2>
+        <p><strong>Read count:</strong> 242943 </p>
+        <p><strong>Reads classified:</strong> 220216 </p>
+        <p><strong>Proportion of reads classified:</strong> 0.91 </p>
+        
+
+            <br>
+            <button class="accordion">Export image</button>
+                <div class="panel">
+                <div class="row">
+                    <div class="column">
+                    <button id="total_classified_svg">SVG</button>
+                    </div>
+                    <div class="column">
+                    <button id="total_classified_png">PNG</button>
+                    </div>
+                </div>
+                </div>
+                <div id="total_classified">
+                <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="360pt" version="1.1" viewBox="0 0 1080 360" width="1080pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2022-10-13T17:01:43.339298</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.3.4, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linecap:butt;stroke-linejoin:round;}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="axes_1">
+   <g id="patch_1">
+    <path d="M 105.19 311.24 
+L 1058.4 311.24 
+L 1058.4 21.6 
+L 105.19 21.6 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g id="patch_2">
+    <path clip-path="url(#pee1e225b54)" d="M 148.517727 311.24 
+L 165.848818 311.24 
+L 165.848818 309.080396 
+L 148.517727 309.080396 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pee1e225b54)" d="M 165.848818 311.24 
+L 183.179909 311.24 
+L 183.179909 287.075481 
+L 165.848818 287.075481 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pee1e225b54)" d="M 183.179909 311.24 
+L 200.511 311.24 
+L 200.511 305.696924 
+L 183.179909 305.696924 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pee1e225b54)" d="M 200.511 311.24 
+L 217.842091 311.24 
+L 217.842091 308.343605 
+L 200.511 308.343605 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pee1e225b54)" d="M 217.842091 311.24 
+L 235.173182 311.24 
+L 235.173182 308.900657 
+L 217.842091 308.900657 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pee1e225b54)" d="M 235.173182 311.24 
+L 252.504273 311.24 
+L 252.504273 310.40305 
+L 235.173182 310.40305 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pee1e225b54)" d="M 252.504273 311.24 
+L 269.835364 311.24 
+L 269.835364 310.194499 
+L 252.504273 310.194499 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pee1e225b54)" d="M 269.835364 311.24 
+L 287.166455 311.24 
+L 287.166455 309.441244 
+L 269.835364 309.441244 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pee1e225b54)" d="M 287.166455 311.24 
+L 304.497545 311.24 
+L 304.497545 299.436266 
+L 287.166455 299.436266 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pee1e225b54)" d="M 304.497545 311.24 
+L 321.828636 311.24 
+L 321.828636 35.392381 
+L 304.497545 35.392381 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pee1e225b54)" d="M 321.828636 311.24 
+L 339.159727 311.24 
+L 339.159727 309.121557 
+L 321.828636 309.121557 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pee1e225b54)" d="M 339.159727 311.24 
+L 356.490818 311.24 
+L 356.490818 310.639043 
+L 339.159727 310.639043 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pee1e225b54)" d="M 356.490818 311.24 
+L 373.821909 311.24 
+L 373.821909 310.718622 
+L 356.490818 310.718622 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pee1e225b54)" d="M 373.821909 311.24 
+L 391.153 311.24 
+L 391.153 311.016356 
+L 373.821909 311.016356 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_16">
+    <path clip-path="url(#pee1e225b54)" d="M 391.153 311.24 
+L 408.484091 311.24 
+L 408.484091 311.153561 
+L 391.153 311.153561 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_17">
+    <path clip-path="url(#pee1e225b54)" d="M 408.484091 311.24 
+L 425.815182 311.24 
+L 425.815182 311.174142 
+L 408.484091 311.174142 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_18">
+    <path clip-path="url(#pee1e225b54)" d="M 425.815182 311.24 
+L 443.146273 311.24 
+L 443.146273 311.165909 
+L 425.815182 311.165909 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_19">
+    <path clip-path="url(#pee1e225b54)" d="M 443.146273 311.24 
+L 460.477364 311.24 
+L 460.477364 311.178258 
+L 443.146273 311.178258 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_20">
+    <path clip-path="url(#pee1e225b54)" d="M 460.477364 311.24 
+L 477.808455 311.24 
+L 477.808455 311.157677 
+L 460.477364 311.157677 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_21">
+    <path clip-path="url(#pee1e225b54)" d="M 477.808455 311.24 
+L 495.139545 311.24 
+L 495.139545 310.855826 
+L 477.808455 310.855826 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_22">
+    <path clip-path="url(#pee1e225b54)" d="M 495.139545 311.24 
+L 512.470636 311.24 
+L 512.470636 310.803689 
+L 495.139545 310.803689 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_23">
+    <path clip-path="url(#pee1e225b54)" d="M 512.470636 311.24 
+L 529.801727 311.24 
+L 529.801727 311.152189 
+L 512.470636 311.152189 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_24">
+    <path clip-path="url(#pee1e225b54)" d="M 529.801727 311.24 
+L 547.132818 311.24 
+L 547.132818 311.196094 
+L 529.801727 311.196094 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_25">
+    <path clip-path="url(#pee1e225b54)" d="M 547.132818 311.24 
+L 564.463909 311.24 
+L 564.463909 311.213931 
+L 547.132818 311.213931 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_26">
+    <path clip-path="url(#pee1e225b54)" d="M 564.463909 311.24 
+L 581.795 311.24 
+L 581.795 311.227652 
+L 564.463909 311.227652 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_27">
+    <path clip-path="url(#pee1e225b54)" d="M 581.795 311.24 
+L 599.126091 311.24 
+L 599.126091 311.230396 
+L 581.795 311.230396 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_28">
+    <path clip-path="url(#pee1e225b54)" d="M 599.126091 311.24 
+L 616.457182 311.24 
+L 616.457182 311.238628 
+L 599.126091 311.238628 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_29">
+    <path clip-path="url(#pee1e225b54)" d="M 616.457182 311.24 
+L 633.788273 311.24 
+L 633.788273 311.235884 
+L 616.457182 311.235884 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_30">
+    <path clip-path="url(#pee1e225b54)" d="M 633.788273 311.24 
+L 651.119364 311.24 
+L 651.119364 311.231768 
+L 633.788273 311.231768 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_31">
+    <path clip-path="url(#pee1e225b54)" d="M 651.119364 311.24 
+L 668.450455 311.24 
+L 668.450455 311.229024 
+L 651.119364 311.229024 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_32">
+    <path clip-path="url(#pee1e225b54)" d="M 668.450455 311.24 
+L 685.781545 311.24 
+L 685.781545 311.22628 
+L 668.450455 311.22628 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_33">
+    <path clip-path="url(#pee1e225b54)" d="M 685.781545 311.24 
+L 703.112636 311.24 
+L 703.112636 311.229024 
+L 685.781545 311.229024 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_34">
+    <path clip-path="url(#pee1e225b54)" d="M 703.112636 311.24 
+L 720.443727 311.24 
+L 720.443727 311.237256 
+L 703.112636 311.237256 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_35">
+    <path clip-path="url(#pee1e225b54)" d="M 720.443727 311.24 
+L 737.774818 311.24 
+L 737.774818 311.237256 
+L 720.443727 311.237256 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_36">
+    <path clip-path="url(#pee1e225b54)" d="M 737.774818 311.24 
+L 755.105909 311.24 
+L 755.105909 311.24 
+L 737.774818 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_37">
+    <path clip-path="url(#pee1e225b54)" d="M 755.105909 311.24 
+L 772.437 311.24 
+L 772.437 311.24 
+L 755.105909 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_38">
+    <path clip-path="url(#pee1e225b54)" d="M 772.437 311.24 
+L 789.768091 311.24 
+L 789.768091 311.24 
+L 772.437 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_39">
+    <path clip-path="url(#pee1e225b54)" d="M 789.768091 311.24 
+L 807.099182 311.24 
+L 807.099182 311.24 
+L 789.768091 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_40">
+    <path clip-path="url(#pee1e225b54)" d="M 807.099182 311.24 
+L 824.430273 311.24 
+L 824.430273 311.238628 
+L 807.099182 311.238628 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_41">
+    <path clip-path="url(#pee1e225b54)" d="M 824.430273 311.24 
+L 841.761364 311.24 
+L 841.761364 311.24 
+L 824.430273 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_42">
+    <path clip-path="url(#pee1e225b54)" d="M 841.761364 311.24 
+L 859.092455 311.24 
+L 859.092455 311.24 
+L 841.761364 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_43">
+    <path clip-path="url(#pee1e225b54)" d="M 859.092455 311.24 
+L 876.423545 311.24 
+L 876.423545 311.24 
+L 859.092455 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_44">
+    <path clip-path="url(#pee1e225b54)" d="M 876.423545 311.24 
+L 893.754636 311.24 
+L 893.754636 311.238628 
+L 876.423545 311.238628 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_45">
+    <path clip-path="url(#pee1e225b54)" d="M 893.754636 311.24 
+L 911.085727 311.24 
+L 911.085727 311.24 
+L 893.754636 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_46">
+    <path clip-path="url(#pee1e225b54)" d="M 911.085727 311.24 
+L 928.416818 311.24 
+L 928.416818 311.24 
+L 911.085727 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_47">
+    <path clip-path="url(#pee1e225b54)" d="M 928.416818 311.24 
+L 945.747909 311.24 
+L 945.747909 311.24 
+L 928.416818 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_48">
+    <path clip-path="url(#pee1e225b54)" d="M 945.747909 311.24 
+L 963.079 311.24 
+L 963.079 311.24 
+L 945.747909 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_49">
+    <path clip-path="url(#pee1e225b54)" d="M 963.079 311.24 
+L 980.410091 311.24 
+L 980.410091 311.24 
+L 963.079 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_50">
+    <path clip-path="url(#pee1e225b54)" d="M 980.410091 311.24 
+L 997.741182 311.24 
+L 997.741182 311.24 
+L 980.410091 311.24 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_51">
+    <path clip-path="url(#pee1e225b54)" d="M 997.741182 311.24 
+L 1015.072273 311.24 
+L 1015.072273 311.238628 
+L 997.741182 311.238628 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path d="M 0 0 
+L 0 3.5 
+" id="m935cc846ff" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="122.08495" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 122.08495, 333.436875)" x="122.08495" y="333.436875">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="232.221522" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 232.221522, 333.436875)" x="232.221522" y="333.436875">500</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="342.358093" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 342.358093, 333.436875)" x="342.358093" y="333.436875">1000</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="452.494665" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 452.494665, 333.436875)" x="452.494665" y="333.436875">1500</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="562.631237" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 562.631237, 333.436875)" x="562.631237" y="333.436875">2000</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="672.767808" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 672.767808, 333.436875)" x="672.767808" y="333.436875">2500</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="782.90438" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 782.90438, 333.436875)" x="782.90438" y="333.436875">3000</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_8">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="893.040951" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 893.040951, 333.436875)" x="893.040951" y="333.436875">3500</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_9">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="1003.177523" xlink:href="#m935cc846ff" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 1003.177523, 333.436875)" x="1003.177523" y="333.436875">4000</text>
+     </g>
+    </g>
+    <g id="text_10">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 581.795, 356.793125)" x="581.795" y="356.793125">Read length</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_10">
+      <defs>
+       <path d="M 0 0 
+L -3.5 0 
+" id="mff7b7ee059" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#mff7b7ee059" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 318.838437)" x="98.19" y="318.838437">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_11">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#mff7b7ee059" y="242.637572"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 250.236009)" x="98.19" y="250.236009">50000</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_12">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#mff7b7ee059" y="174.035144"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 181.633581)" x="98.19" y="181.633581">100000</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#mff7b7ee059" y="105.432716"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 113.031153)" x="98.19" y="113.031153">150000</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_14">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="105.19" xlink:href="#mff7b7ee059" y="36.830288"/>
+      </g>
+     </g>
+     <g id="text_15">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 98.19, 44.428725)" x="98.19" y="44.428725">200000</text>
+     </g>
+    </g>
+    <g id="text_16">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-90, 13.680625, 166.42)" x="13.680625" y="166.42">Count</text>
+    </g>
+   </g>
+   <g id="line2d_15">
+    <path clip-path="url(#pee1e225b54)" d="M 232.221522 311.24 
+L 232.221522 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="line2d_16">
+    <path clip-path="url(#pee1e225b54)" d="M 342.358093 311.24 
+L 342.358093 21.6 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="patch_52">
+    <path d="M 105.19 311.24 
+L 105.19 21.6 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+   <g id="patch_53">
+    <path d="M 105.19 311.24 
+L 1058.4 311.24 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pee1e225b54">
+   <rect height="289.64" width="953.21" x="105.19" y="21.6"/>
+  </clipPath>
+ </defs>
+</svg>
+
+                </div>
+            <script type="text/javascript">
+            exportImageSVG("#total_classified_svg","#total_classified", "total_classified_chart");
+            </script>
+            <script type="text/javascript">
+            exportImagePNG("#total_classified_png","#total_classified", "total_classified_chart");
+            </script>
+            
+                <h3><strong>Figure 1</strong> | Read length distribution plot for Sequence ID barcode43</h3>
+                <hr>        
+        <h2>2. Classification of unfiltered reads</h2>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2022/barcode43/krona.unfiltered.html">Go to read classifications.</a></p>
+
+        <h2>3. Filtered sequencing reads</h2>
+        <p><strong>Min length:</strong> 500 </p>
+        <p><strong>Max length:</strong> 1000 </p>
+        <p><strong>Read count post filtering:</strong> 214077 </p>
+        <p><strong>Reads classified post filtering:</strong> 213838 </p>
+        <p><strong>Proportion of reads classified:</strong> 1.0 </p>
+        
+        <br>
+        <button class="accordion">Export image</button>
+            <div class="panel">
+            <div class="row">
+                <div class="column">
+                <button id="total_classified_svg">SVG</button>
+                </div>
+                <div class="column">
+                <button id="total_classified_png">PNG</button>
+                </div>
+            </div>
+            </div>
+            <div id="total_classified">
+            <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="360pt" version="1.1" viewBox="0 0 1080 360" width="1080pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2022-10-13T17:01:44.294225</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.3.4, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linecap:butt;stroke-linejoin:round;}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="axes_1">
+   <g id="patch_1">
+    <path d="M 92.41 311.24 
+L 1058.4 311.24 
+L 1058.4 29.438077 
+L 92.41 29.438077 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g id="patch_2">
+    <path clip-path="url(#p6742916d45)" d="M 136.318636 311.24 
+L 153.882091 311.24 
+L 153.882091 310.898416 
+L 136.318636 310.898416 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p6742916d45)" d="M 153.882091 311.24 
+L 171.445545 311.24 
+L 171.445545 310.95476 
+L 153.882091 310.95476 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p6742916d45)" d="M 171.445545 311.24 
+L 189.009 311.24 
+L 189.009 310.958281 
+L 171.445545 310.958281 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p6742916d45)" d="M 189.009 311.24 
+L 206.572455 311.24 
+L 206.572455 310.937152 
+L 189.009 310.937152 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#p6742916d45)" d="M 206.572455 311.24 
+L 224.135909 311.24 
+L 224.135909 310.944195 
+L 206.572455 310.944195 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p6742916d45)" d="M 224.135909 311.24 
+L 241.699364 311.24 
+L 241.699364 310.968846 
+L 224.135909 310.968846 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#p6742916d45)" d="M 241.699364 311.24 
+L 259.262818 311.24 
+L 259.262818 310.975889 
+L 241.699364 310.975889 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#p6742916d45)" d="M 259.262818 311.24 
+L 276.826273 311.24 
+L 276.826273 310.97941 
+L 259.262818 310.97941 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#p6742916d45)" d="M 276.826273 311.24 
+L 294.389727 311.24 
+L 294.389727 311.000539 
+L 276.826273 311.000539 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#p6742916d45)" d="M 294.389727 311.24 
+L 311.953182 311.24 
+L 311.953182 310.968846 
+L 294.389727 310.968846 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#p6742916d45)" d="M 311.953182 311.24 
+L 329.516636 311.24 
+L 329.516636 310.923067 
+L 311.953182 310.923067 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#p6742916d45)" d="M 329.516636 311.24 
+L 347.080091 311.24 
+L 347.080091 310.975889 
+L 329.516636 310.975889 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#p6742916d45)" d="M 347.080091 311.24 
+L 364.643545 311.24 
+L 364.643545 310.95476 
+L 347.080091 310.95476 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#p6742916d45)" d="M 364.643545 311.24 
+L 382.207 311.24 
+L 382.207 310.923067 
+L 364.643545 310.923067 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_16">
+    <path clip-path="url(#p6742916d45)" d="M 382.207 311.24 
+L 399.770455 311.24 
+L 399.770455 310.838551 
+L 382.207 310.838551 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_17">
+    <path clip-path="url(#p6742916d45)" d="M 399.770455 311.24 
+L 417.333909 311.24 
+L 417.333909 310.820944 
+L 399.770455 310.820944 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_18">
+    <path clip-path="url(#p6742916d45)" d="M 417.333909 311.24 
+L 434.897364 311.24 
+L 434.897364 310.796293 
+L 417.333909 310.796293 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_19">
+    <path clip-path="url(#p6742916d45)" d="M 434.897364 311.24 
+L 452.460818 311.24 
+L 452.460818 310.739949 
+L 434.897364 310.739949 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_20">
+    <path clip-path="url(#p6742916d45)" d="M 452.460818 311.24 
+L 470.024273 311.24 
+L 470.024273 310.542746 
+L 452.460818 310.542746 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_21">
+    <path clip-path="url(#p6742916d45)" d="M 470.024273 311.24 
+L 487.587727 311.24 
+L 487.587727 310.215248 
+L 470.024273 310.215248 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_22">
+    <path clip-path="url(#p6742916d45)" d="M 487.587727 311.24 
+L 505.151182 311.24 
+L 505.151182 310.585004 
+L 487.587727 310.585004 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_23">
+    <path clip-path="url(#p6742916d45)" d="M 505.151182 311.24 
+L 522.714636 311.24 
+L 522.714636 310.768121 
+L 505.151182 310.768121 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_24">
+    <path clip-path="url(#p6742916d45)" d="M 522.714636 311.24 
+L 540.278091 311.24 
+L 540.278091 310.7646 
+L 522.714636 310.7646 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_25">
+    <path clip-path="url(#p6742916d45)" d="M 540.278091 311.24 
+L 557.841545 311.24 
+L 557.841545 310.796293 
+L 540.278091 310.796293 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_26">
+    <path clip-path="url(#p6742916d45)" d="M 557.841545 311.24 
+L 575.405 311.24 
+L 575.405 310.891373 
+L 557.841545 310.891373 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_27">
+    <path clip-path="url(#p6742916d45)" d="M 575.405 311.24 
+L 592.968455 311.24 
+L 592.968455 310.641348 
+L 575.405 310.641348 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_28">
+    <path clip-path="url(#p6742916d45)" d="M 592.968455 311.24 
+L 610.531909 311.24 
+L 610.531909 310.507532 
+L 592.968455 310.507532 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_29">
+    <path clip-path="url(#p6742916d45)" d="M 610.531909 311.24 
+L 628.095364 311.24 
+L 628.095364 310.257506 
+L 610.531909 310.257506 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_30">
+    <path clip-path="url(#p6742916d45)" d="M 628.095364 311.24 
+L 645.658818 311.24 
+L 645.658818 309.764499 
+L 628.095364 309.764499 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_31">
+    <path clip-path="url(#p6742916d45)" d="M 645.658818 311.24 
+L 663.222273 311.24 
+L 663.222273 308.852435 
+L 645.658818 308.852435 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_32">
+    <path clip-path="url(#p6742916d45)" d="M 663.222273 311.24 
+L 680.785727 311.24 
+L 680.785727 307.376933 
+L 663.222273 307.376933 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_33">
+    <path clip-path="url(#p6742916d45)" d="M 680.785727 311.24 
+L 698.349182 311.24 
+L 698.349182 304.123083 
+L 680.785727 304.123083 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_34">
+    <path clip-path="url(#p6742916d45)" d="M 698.349182 311.24 
+L 715.912636 311.24 
+L 715.912636 296.048322 
+L 698.349182 296.048322 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_35">
+    <path clip-path="url(#p6742916d45)" d="M 715.912636 311.24 
+L 733.476091 311.24 
+L 733.476091 277.405591 
+L 715.912636 277.405591 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_36">
+    <path clip-path="url(#p6742916d45)" d="M 733.476091 311.24 
+L 751.039545 311.24 
+L 751.039545 245.166414 
+L 733.476091 245.166414 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_37">
+    <path clip-path="url(#p6742916d45)" d="M 751.039545 311.24 
+L 768.603 311.24 
+L 768.603 163.320107 
+L 751.039545 163.320107 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_38">
+    <path clip-path="url(#p6742916d45)" d="M 768.603 311.24 
+L 786.166455 311.24 
+L 786.166455 42.857216 
+L 768.603 42.857216 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_39">
+    <path clip-path="url(#p6742916d45)" d="M 786.166455 311.24 
+L 803.729909 311.24 
+L 803.729909 158.590755 
+L 786.166455 158.590755 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_40">
+    <path clip-path="url(#p6742916d45)" d="M 803.729909 311.24 
+L 821.293364 311.24 
+L 821.293364 282.092685 
+L 803.729909 282.092685 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_41">
+    <path clip-path="url(#p6742916d45)" d="M 821.293364 311.24 
+L 838.856818 311.24 
+L 838.856818 305.190092 
+L 821.293364 305.190092 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_42">
+    <path clip-path="url(#p6742916d45)" d="M 838.856818 311.24 
+L 856.420273 311.24 
+L 856.420273 308.81722 
+L 838.856818 308.81722 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_43">
+    <path clip-path="url(#p6742916d45)" d="M 856.420273 311.24 
+L 873.983727 311.24 
+L 873.983727 309.778585 
+L 856.420273 309.778585 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_44">
+    <path clip-path="url(#p6742916d45)" d="M 873.983727 311.24 
+L 891.547182 311.24 
+L 891.547182 310.246942 
+L 873.983727 310.246942 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_45">
+    <path clip-path="url(#p6742916d45)" d="M 891.547182 311.24 
+L 909.110636 311.24 
+L 909.110636 310.475838 
+L 891.547182 310.475838 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_46">
+    <path clip-path="url(#p6742916d45)" d="M 909.110636 311.24 
+L 926.674091 311.24 
+L 926.674091 310.715299 
+L 909.110636 310.715299 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_47">
+    <path clip-path="url(#p6742916d45)" d="M 926.674091 311.24 
+L 944.237545 311.24 
+L 944.237545 310.873766 
+L 926.674091 310.873766 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_48">
+    <path clip-path="url(#p6742916d45)" d="M 944.237545 311.24 
+L 961.801 311.24 
+L 961.801 310.891373 
+L 944.237545 310.891373 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_49">
+    <path clip-path="url(#p6742916d45)" d="M 961.801 311.24 
+L 979.364455 311.24 
+L 979.364455 310.908981 
+L 961.801 310.908981 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_50">
+    <path clip-path="url(#p6742916d45)" d="M 979.364455 311.24 
+L 996.927909 311.24 
+L 996.927909 311.042797 
+L 979.364455 311.042797 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="patch_51">
+    <path clip-path="url(#p6742916d45)" d="M 996.927909 311.24 
+L 1014.491364 311.24 
+L 1014.491364 311.063926 
+L 996.927909 311.063926 
+z
+" style="fill:#419595;"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path d="M 0 0 
+L 0 3.5 
+" id="mc740b7e228" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="134.555237" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 134.555237, 333.436875)" x="134.555237" y="333.436875">500</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="310.895142" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 310.895142, 333.436875)" x="310.895142" y="333.436875">600</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="487.235047" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 487.235047, 333.436875)" x="487.235047" y="333.436875">700</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="663.574953" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 663.574953, 333.436875)" x="663.574953" y="333.436875">800</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="839.914858" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 839.914858, 333.436875)" x="839.914858" y="333.436875">900</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="1016.254763" xlink:href="#mc740b7e228" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 1016.254763, 333.436875)" x="1016.254763" y="333.436875">1000</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 575.405, 356.793125)" x="575.405" y="356.793125">Read length</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <defs>
+       <path d="M 0 0 
+L -3.5 0 
+" id="ma648d25bfb" style="stroke:#000000;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#ma648d25bfb" y="311.24"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 318.838437)" x="85.41" y="318.838437">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#ma648d25bfb" y="240.81034"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 248.408778)" x="85.41" y="248.408778">20000</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#ma648d25bfb" y="170.38068"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 177.979118)" x="85.41" y="177.979118">40000</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_10">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#ma648d25bfb" y="99.95102"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 107.549458)" x="85.41" y="107.549458">60000</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_11">
+      <g>
+       <use style="stroke:#000000;stroke-width:0.8;" x="92.41" xlink:href="#ma648d25bfb" y="29.52136"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 85.41, 37.119798)" x="85.41" y="37.119798">80000</text>
+     </g>
+    </g>
+    <g id="text_13">
+     <text style="font-family:DejaVu Sans;font-size:20px;font-stretch:normal;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-90, 13.625625, 170.339038)" x="13.625625" y="170.339038">Count</text>
+    </g>
+   </g>
+   <g id="line2d_12">
+    <path clip-path="url(#p6742916d45)" d="M 134.555237 311.24 
+L 134.555237 29.438077 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="line2d_13">
+    <path clip-path="url(#p6742916d45)" d="M 1016.254763 311.24 
+L 1016.254763 29.438077 
+" style="fill:none;stroke:#696969;stroke-dasharray:5.55,2.4;stroke-dashoffset:0;stroke-width:1.5;"/>
+   </g>
+   <g id="patch_52">
+    <path d="M 92.41 311.24 
+L 92.41 29.438077 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+   <g id="patch_53">
+    <path d="M 92.41 311.24 
+L 1058.4 311.24 
+" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p6742916d45">
+   <rect height="281.801923" width="965.99" x="92.41" y="29.438077"/>
+  </clipPath>
+ </defs>
+</svg>
+
+            </div>
+        <script type="text/javascript">
+        exportImageSVG("#total_classified_svg","#total_classified", "total_classified_chart");
+        </script>
+        <script type="text/javascript">
+        exportImagePNG("#total_classified_png","#total_classified", "total_classified_chart");
+        </script>
+        
+        <h3><strong>Figure 2</strong> | Filtered read length distribution plot for sequence id barcode43</h3>
+                <hr>  
+        <h2>4. Classification of filtered reads</h2>
+        <p><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_2022/barcode43/krona.filtered.html">Go to read classifications.</a></p>
+        
+        <h2>5. Taxa with consensus sequences generated.</h2>
+        <p><strong>Note:</strong> consensus generation was run for taxa with more than 50 classified reads between 500-1000 base pairs in length. 
+            A sequence may not be available if the group of reads for a given taxonomic id were too diverse.</p>
+        <br>
+        <h3><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_2022/barcode43/consensus_sequences">Go to consensus sequences.</a></h3>
+
+        <h3><strong>Table 1</strong> | Summary of taxa in sample </h3>
+          <button class="accordion">Table options</button>
+          <div class="panel">
+            <div class="row">
+              <div class="col-sm-2">
+                <strong>Show columns:</strong>
+              </div>
+
+              
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="0" style="color:#419595">Taxid</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="1" style="color:#419595">Taxon</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="2" style="color:#419595">Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="3" style="color:#419595">Sub Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="4" style="color:#419595">Pcent Reads</a> 
+                </div>
+                
+                
+                <div class="col-sm-1">
+                  <a class="toggle-vis" data-column="5" style="color:#419595">Consensus Available</a> 
+                </div>
+                
+
+          </div>
+          <div class="row">
+            <div class="col-sm-2" ><strong>Export table: </strong></div>
+            <div class="col-sm-8" id="tableExportID"></div>
+          </div>
+          </div>
+          <table class="display nowrap" id="myTable">
+            <thead>
+              <tr>
+              <th style="width:10%;">Taxid</th>
+              <th style="width:10%;">Taxon</th>
+              <th style="width:10%;">Reads</th>
+              <th style="width:10%;">Sub Reads</th>
+              <th style="width:10%;">Pcent Reads</th>
+              <th style="width:10%;">Consensus Available</th>
+              </tr>
+            </thead>
+            <tbody>
+                  <tr>
+                      <td>6656</td>
+                      <td>Arthropoda</td>
+                      <td>1022</td>
+                      <td>213730</td>
+                      <td> 99.84</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>197563</td>
+                      <td>Mandibulata</td>
+                      <td>77</td>
+                      <td>209617</td>
+                      <td> 97.92</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>197562</td>
+                      <td>Pancrustacea</td>
+                      <td>526</td>
+                      <td>209360</td>
+                      <td> 97.80</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>6960</td>
+                      <td>Hexapoda</td>
+                      <td>109</td>
+                      <td>208252</td>
+                      <td> 97.28</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7496</td>
+                      <td>Pterygota</td>
+                      <td>241</td>
+                      <td>208044</td>
+                      <td> 97.18</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>33340</td>
+                      <td>Neoptera</td>
+                      <td>578</td>
+                      <td>207495</td>
+                      <td> 96.93</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>33392</td>
+                      <td>Endopterygota</td>
+                      <td>48756</td>
+                      <td>206368</td>
+                      <td> 96.40</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7147</td>
+                      <td>Diptera</td>
+                      <td>2076</td>
+                      <td>83569</td>
+                      <td> 39.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>480118</td>
+                      <td>Eremoneura</td>
+                      <td>153</td>
+                      <td>67276</td>
+                      <td> 31.43</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>480117</td>
+                      <td>Cyclorrhapha</td>
+                      <td>561</td>
+                      <td>65942</td>
+                      <td> 30.80</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>36164</td>
+                      <td>Phoridae</td>
+                      <td>41820</td>
+                      <td>49553</td>
+                      <td> 23.15</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1473657</td>
+                      <td>Megaselia arcticae</td>
+                      <td>6422</td>
+                      <td>6422</td>
+                      <td>  3.00</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1881774</td>
+                      <td>Megaselia sp. BOLD-2016</td>
+                      <td>388</td>
+                      <td>388</td>
+                      <td>  0.18</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2278780</td>
+                      <td>Megaselia sp. BIOUG26780-C01</td>
+                      <td>287</td>
+                      <td>287</td>
+                      <td>  0.13</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>82169</td>
+                      <td>unclassified Phoridae</td>
+                      <td>549</td>
+                      <td>591</td>
+                      <td>  0.28</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>43738</td>
+                      <td>Schizophora</td>
+                      <td>190</td>
+                      <td>15753</td>
+                      <td>  7.36</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>43742</td>
+                      <td>Calyptratae</td>
+                      <td>55</td>
+                      <td>14775</td>
+                      <td>  6.90</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>27474</td>
+                      <td>Tachinidae</td>
+                      <td>13152</td>
+                      <td>14277</td>
+                      <td>  6.67</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2335644</td>
+                      <td>Tachinidae sp. JSDIQ164-10</td>
+                      <td>383</td>
+                      <td>383</td>
+                      <td>  0.18</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1480382</td>
+                      <td>Tachinidae sp. BOLD:ACC7769</td>
+                      <td>268</td>
+                      <td>268</td>
+                      <td>  0.13</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2171775</td>
+                      <td>Cistogaster mesnili</td>
+                      <td>92</td>
+                      <td>92</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2579711</td>
+                      <td>Syringosoma sp. CR 123</td>
+                      <td>85</td>
+                      <td>85</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2611131</td>
+                      <td>Tromodesiana thomae</td>
+                      <td>104</td>
+                      <td>104</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1888076</td>
+                      <td>Graphogaster sp. BOLD-2016</td>
+                      <td>78</td>
+                      <td>78</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1474003</td>
+                      <td>Hebecnema sp. BOLD:AAG1726</td>
+                      <td>203</td>
+                      <td>203</td>
+                      <td>  0.09</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1477538</td>
+                      <td>Phortica eugamma</td>
+                      <td>213</td>
+                      <td>213</td>
+                      <td>  0.10</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1477548</td>
+                      <td>Phortica lambda</td>
+                      <td>65</td>
+                      <td>65</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2049374</td>
+                      <td>Phortica foliata</td>
+                      <td>232</td>
+                      <td>232</td>
+                      <td>  0.11</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2495455</td>
+                      <td>Leucophenga oxyptera</td>
+                      <td>76</td>
+                      <td>76</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>683883</td>
+                      <td>Tritoxa sp. DIMC018-09</td>
+                      <td>60</td>
+                      <td>60</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1446259</td>
+                      <td>unclassified Hybotidae</td>
+                      <td>310</td>
+                      <td>902</td>
+                      <td>  0.42</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2659377</td>
+                      <td>Hybotidae sp. BOLD:AAF9831</td>
+                      <td>578</td>
+                      <td>578</td>
+                      <td>  0.27</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>92558</td>
+                      <td>Dolichopodidae</td>
+                      <td>68</td>
+                      <td>262</td>
+                      <td>  0.12</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>626562</td>
+                      <td>unclassified Dolichopodidae</td>
+                      <td>109</td>
+                      <td>168</td>
+                      <td>  0.08</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2657354</td>
+                      <td>Bombyliidae sp. BOLD:AAN5111</td>
+                      <td>61</td>
+                      <td>61</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7148</td>
+                      <td>Nematocera</td>
+                      <td>311</td>
+                      <td>14040</td>
+                      <td>  6.56</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>41830</td>
+                      <td>Sciaroidea</td>
+                      <td>105</td>
+                      <td>8900</td>
+                      <td>  4.16</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7184</td>
+                      <td>Sciaridae</td>
+                      <td>152</td>
+                      <td>6926</td>
+                      <td>  3.24</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>265459</td>
+                      <td>unclassified Sciaridae</td>
+                      <td>83</td>
+                      <td>6697</td>
+                      <td>  3.13</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1784096</td>
+                      <td>Sciaridae sp. BOLD:ACL3019</td>
+                      <td>6026</td>
+                      <td>6026</td>
+                      <td>  2.81</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1784377</td>
+                      <td>Sciaridae sp. BOLD:ACM8049</td>
+                      <td>240</td>
+                      <td>240</td>
+                      <td>  0.11</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1784273</td>
+                      <td>Sciaridae sp. BOLD:ACL9574</td>
+                      <td>203</td>
+                      <td>203</td>
+                      <td>  0.09</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1881792</td>
+                      <td>Sciaridae sp. BOLD-2016</td>
+                      <td>99</td>
+                      <td>99</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>329961</td>
+                      <td>unclassified Cecidomyiidae</td>
+                      <td>675</td>
+                      <td>1654</td>
+                      <td>  0.77</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1881751</td>
+                      <td>Cecidomyiidae sp. BOLD-2016</td>
+                      <td>140</td>
+                      <td>140</td>
+                      <td>  0.07</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1692853</td>
+                      <td>Cecidomyiidae sp. BOLD:ABV1332</td>
+                      <td>135</td>
+                      <td>135</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1782289</td>
+                      <td>Cecidomyiidae sp. BOLD:ACM1762</td>
+                      <td>81</td>
+                      <td>81</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1728310</td>
+                      <td>Cecidomyiidae sp. BOLD:ACK1709</td>
+                      <td>67</td>
+                      <td>67</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2357751</td>
+                      <td>Cecidomyiidae sp. BIOUG21040-H04</td>
+                      <td>62</td>
+                      <td>62</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7157</td>
+                      <td>Culicidae</td>
+                      <td>2268</td>
+                      <td>2427</td>
+                      <td>  1.13</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7163</td>
+                      <td>Aedes vexans</td>
+                      <td>68</td>
+                      <td>68</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>41427</td>
+                      <td>Anopheles atroparvus</td>
+                      <td>54</td>
+                      <td>54</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7149</td>
+                      <td>Chironomidae</td>
+                      <td>476</td>
+                      <td>1882</td>
+                      <td>  0.88</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>305539</td>
+                      <td>unclassified Chironomidae</td>
+                      <td>97</td>
+                      <td>579</td>
+                      <td>  0.27</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1749779</td>
+                      <td>Chironomidae sp. BOLD:ACJ2946</td>
+                      <td>96</td>
+                      <td>96</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2872915</td>
+                      <td>Chironomidae sp. LA_LSLZ5_279</td>
+                      <td>65</td>
+                      <td>65</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1791171</td>
+                      <td>Chironomidae sp. BOLD:ACM4162</td>
+                      <td>57</td>
+                      <td>57</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2764741</td>
+                      <td>Chironomidae sp. CH681-B07</td>
+                      <td>55</td>
+                      <td>55</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2873065</td>
+                      <td>Chironomidae sp. LA_LSLRZ9_222</td>
+                      <td>53</td>
+                      <td>53</td>
+                      <td>  0.02</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2872841</td>
+                      <td>Kiefferulus tendipediformis</td>
+                      <td>146</td>
+                      <td>146</td>
+                      <td>  0.07</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1279004</td>
+                      <td>Phaenopsectra flavipes</td>
+                      <td>54</td>
+                      <td>54</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>43808</td>
+                      <td>Orthocladiinae</td>
+                      <td>59</td>
+                      <td>304</td>
+                      <td>  0.14</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>880183</td>
+                      <td>unclassified Ceratopogonidae</td>
+                      <td>68</td>
+                      <td>298</td>
+                      <td>  0.14</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1743899</td>
+                      <td>Ceratopogonidae sp. BOLD:ACC3826</td>
+                      <td>146</td>
+                      <td>146</td>
+                      <td>  0.07</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>85604</td>
+                      <td>Amphiesmenoptera</td>
+                      <td>191</td>
+                      <td>42750</td>
+                      <td> 19.97</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7088</td>
+                      <td>Lepidoptera</td>
+                      <td>1597</td>
+                      <td>41888</td>
+                      <td> 19.57</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>37567</td>
+                      <td>Ditrysia</td>
+                      <td>2427</td>
+                      <td>39762</td>
+                      <td> 18.57</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>104431</td>
+                      <td>Obtectomera</td>
+                      <td>1441</td>
+                      <td>35135</td>
+                      <td> 16.41</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>37573</td>
+                      <td>Pyraloidea</td>
+                      <td>150</td>
+                      <td>27101</td>
+                      <td> 12.66</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1107106</td>
+                      <td>Pyralidae sp. BOLD:AAU4768</td>
+                      <td>25182</td>
+                      <td>25182</td>
+                      <td> 11.76</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1558314</td>
+                      <td>Tatobotys biannulalis</td>
+                      <td>1001</td>
+                      <td>1001</td>
+                      <td>  0.47</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2568560</td>
+                      <td>Synclera nr. traducalis MAMOT773-10</td>
+                      <td>381</td>
+                      <td>381</td>
+                      <td>  0.18</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1266083</td>
+                      <td>Aetholix flavibasalis</td>
+                      <td>87</td>
+                      <td>87</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>572826</td>
+                      <td>Chrysoteuchia topiarius</td>
+                      <td>56</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>37570</td>
+                      <td>Noctuoidea</td>
+                      <td>62</td>
+                      <td>5516</td>
+                      <td>  2.58</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1375395</td>
+                      <td>Nola leucoma</td>
+                      <td>3208</td>
+                      <td>3208</td>
+                      <td>  1.50</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>95186</td>
+                      <td>Plusiinae</td>
+                      <td>54</td>
+                      <td>540</td>
+                      <td>  0.25</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>254367</td>
+                      <td>Anadevidia peponis</td>
+                      <td>484</td>
+                      <td>484</td>
+                      <td>  0.23</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>721896</td>
+                      <td>Trichordestra lilacina</td>
+                      <td>521</td>
+                      <td>521</td>
+                      <td>  0.24</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1558335</td>
+                      <td>Thalatha melanophrica</td>
+                      <td>201</td>
+                      <td>201</td>
+                      <td>  0.09</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2792006</td>
+                      <td>Chamaita sp. BOLD:AAI7239</td>
+                      <td>334</td>
+                      <td>334</td>
+                      <td>  0.16</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>464371</td>
+                      <td>Apantesis ornata</td>
+                      <td>67</td>
+                      <td>67</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1374928</td>
+                      <td>Lyncestis melanoschista</td>
+                      <td>137</td>
+                      <td>137</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1555520</td>
+                      <td>Arsacia rectalis</td>
+                      <td>63</td>
+                      <td>63</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1007343</td>
+                      <td>Abraxas grossulariatus</td>
+                      <td>164</td>
+                      <td>164</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1375596</td>
+                      <td>Onycodes rubra</td>
+                      <td>105</td>
+                      <td>105</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>688426</td>
+                      <td>Pleuroprucha insulsaria</td>
+                      <td>73</td>
+                      <td>73</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>722271</td>
+                      <td>Myscelia ethusa</td>
+                      <td>53</td>
+                      <td>53</td>
+                      <td>  0.02</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2727443</td>
+                      <td>Aproaerema thaumalea</td>
+                      <td>310</td>
+                      <td>310</td>
+                      <td>  0.14</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1660643</td>
+                      <td>Gelechia scotinella</td>
+                      <td>88</td>
+                      <td>88</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2727698</td>
+                      <td>Sophronia illustrella</td>
+                      <td>60</td>
+                      <td>60</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2727719</td>
+                      <td>Thiotricha coleella</td>
+                      <td>174</td>
+                      <td>174</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1495439</td>
+                      <td>Coleophora duplicis group sp. BOLD:AAA3993</td>
+                      <td>172</td>
+                      <td>172</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1113279</td>
+                      <td>Megalopyge opercularis</td>
+                      <td>403</td>
+                      <td>403</td>
+                      <td>  0.19</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>81692</td>
+                      <td>Platynota idaeusalis</td>
+                      <td>82</td>
+                      <td>82</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1370761</td>
+                      <td>Acropolitis canana</td>
+                      <td>51</td>
+                      <td>51</td>
+                      <td>  0.02</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>106496</td>
+                      <td>Sesiidae</td>
+                      <td>52</td>
+                      <td>102</td>
+                      <td>  0.05</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1374465</td>
+                      <td>Imma acosma</td>
+                      <td>71</td>
+                      <td>71</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2648784</td>
+                      <td>unclassified Homosetia</td>
+                      <td>145</td>
+                      <td>152</td>
+                      <td>  0.07</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>830895</td>
+                      <td>Lepidoptera sp. BOLD:AAA1115</td>
+                      <td>122</td>
+                      <td>122</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>830356</td>
+                      <td>Lepidoptera sp. BOLD:AAA0557</td>
+                      <td>56</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1188118</td>
+                      <td>Hydatophylax hesperus</td>
+                      <td>66</td>
+                      <td>66</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1664975</td>
+                      <td>Neureclipsis sp. BOLD:ACG3346</td>
+                      <td>136</td>
+                      <td>136</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7399</td>
+                      <td>Hymenoptera</td>
+                      <td>1123</td>
+                      <td>20687</td>
+                      <td>  9.66</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7400</td>
+                      <td>Apocrita</td>
+                      <td>460</td>
+                      <td>17598</td>
+                      <td>  8.22</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1955251</td>
+                      <td>Parasitoida</td>
+                      <td>860</td>
+                      <td>14944</td>
+                      <td>  6.98</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7401</td>
+                      <td>Ichneumonoidea</td>
+                      <td>200</td>
+                      <td>5674</td>
+                      <td>  2.65</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>7402</td>
+                      <td>Braconidae</td>
+                      <td>105</td>
+                      <td>3547</td>
+                      <td>  1.66</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>55939</td>
+                      <td>Aleiodes</td>
+                      <td>1655</td>
+                      <td>1917</td>
+                      <td>  0.90</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1043797</td>
+                      <td>Aleiodes sp. BOLD:AAG5007</td>
+                      <td>104</td>
+                      <td>104</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1043811</td>
+                      <td>Aleiodes sp. BOLD:AAG7599</td>
+                      <td>56</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>65207</td>
+                      <td>Microgastrinae</td>
+                      <td>94</td>
+                      <td>841</td>
+                      <td>  0.39</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1894025</td>
+                      <td>Microgastrinae sp. CNCH3087</td>
+                      <td>343</td>
+                      <td>343</td>
+                      <td>  0.16</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1889320</td>
+                      <td>Sathon sp. BOLD-2016</td>
+                      <td>255</td>
+                      <td>255</td>
+                      <td>  0.12</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>986461</td>
+                      <td>Heterospilus sp. BOLD:AAA4577</td>
+                      <td>113</td>
+                      <td>113</td>
+                      <td>  0.05</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1044179</td>
+                      <td>Cheloninae sp. BOLD:AAH0590</td>
+                      <td>70</td>
+                      <td>70</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>566040</td>
+                      <td>Psyttalia humilis</td>
+                      <td>56</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7408</td>
+                      <td>Ichneumonidae</td>
+                      <td>105</td>
+                      <td>1927</td>
+                      <td>  0.90</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1044698</td>
+                      <td>Scopesis sp. BOLD:AAG9200</td>
+                      <td>955</td>
+                      <td>955</td>
+                      <td>  0.45</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1289687</td>
+                      <td>Ctenopelmatinae sp. BOLD:AAH2015</td>
+                      <td>81</td>
+                      <td>81</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2472350</td>
+                      <td>Ichneumonidae sp. BIOUG04854-D10</td>
+                      <td>151</td>
+                      <td>151</td>
+                      <td>  0.07</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1142977</td>
+                      <td>Netelia sp. BOLD:ABA0681</td>
+                      <td>66</td>
+                      <td>66</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2651393</td>
+                      <td>Pedunculus sp. CNC 422415</td>
+                      <td>62</td>
+                      <td>62</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>81084</td>
+                      <td>Platygastroidea</td>
+                      <td>64</td>
+                      <td>5233</td>
+                      <td>  2.44</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1252372</td>
+                      <td>unclassified Platygastridae</td>
+                      <td>302</td>
+                      <td>5109</td>
+                      <td>  2.39</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1800878</td>
+                      <td>Platygastridae sp. BOLD:ACO2586</td>
+                      <td>4413</td>
+                      <td>4413</td>
+                      <td>  2.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1800746</td>
+                      <td>Platygastridae sp. BOLD:ACL6205</td>
+                      <td>253</td>
+                      <td>253</td>
+                      <td>  0.12</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1473906</td>
+                      <td>unclassified Mymaridae</td>
+                      <td>103</td>
+                      <td>301</td>
+                      <td>  0.14</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1881781</td>
+                      <td>Mymaridae sp. BOLD-2016</td>
+                      <td>193</td>
+                      <td>193</td>
+                      <td>  0.09</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2639843</td>
+                      <td>unclassified Anagrus</td>
+                      <td>108</td>
+                      <td>108</td>
+                      <td>  0.05</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2233478</td>
+                      <td>Tetrastichinae sp. BC-ZSM-HYM-21588-C05</td>
+                      <td>260</td>
+                      <td>260</td>
+                      <td>  0.12</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2503027</td>
+                      <td>Encarsia sp. InEnc24</td>
+                      <td>342</td>
+                      <td>342</td>
+                      <td>  0.16</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>44353</td>
+                      <td>Figitidae</td>
+                      <td>425</td>
+                      <td>813</td>
+                      <td>  0.38</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1887784</td>
+                      <td>Figitidae sp. BOLD-2016</td>
+                      <td>342</td>
+                      <td>342</td>
+                      <td>  0.16</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2327929</td>
+                      <td>Dryocosmus sp. PHGGC011-10</td>
+                      <td>55</td>
+                      <td>55</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2554701</td>
+                      <td>Proctotrupidae sp. BBHYL034-10</td>
+                      <td>567</td>
+                      <td>567</td>
+                      <td>  0.26</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1887889</td>
+                      <td>Proctotrupidae sp. BOLD-2016</td>
+                      <td>242</td>
+                      <td>242</td>
+                      <td>  0.11</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1881775</td>
+                      <td>Megaspilidae sp. BOLD-2016</td>
+                      <td>85</td>
+                      <td>85</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>115104</td>
+                      <td>Halictus scabiosae</td>
+                      <td>206</td>
+                      <td>206</td>
+                      <td>  0.10</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1126394</td>
+                      <td>Sphecodes albilabris</td>
+                      <td>205</td>
+                      <td>205</td>
+                      <td>  0.10</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2223878</td>
+                      <td>Tachysphex sp. BIOUG21526-D11</td>
+                      <td>154</td>
+                      <td>154</td>
+                      <td>  0.07</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1889500</td>
+                      <td>Crabro latipes</td>
+                      <td>97</td>
+                      <td>97</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2791916</td>
+                      <td>Sphecinae sp. BOLD:AAQ3021</td>
+                      <td>55</td>
+                      <td>55</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>237677</td>
+                      <td>Hypoponera</td>
+                      <td>82</td>
+                      <td>88</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>231980</td>
+                      <td>Stigmatomma pallipes</td>
+                      <td>51</td>
+                      <td>51</td>
+                      <td>  0.02</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2657311</td>
+                      <td>Bethylidae sp. BOLD:AAG8199</td>
+                      <td>257</td>
+                      <td>257</td>
+                      <td>  0.12</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2612955</td>
+                      <td>Dolichodynerus tanynotus</td>
+                      <td>178</td>
+                      <td>178</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1252452</td>
+                      <td>Euura sp. 'Amauronematus' BOLD:ABU5550</td>
+                      <td>847</td>
+                      <td>847</td>
+                      <td>  0.40</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2872561</td>
+                      <td>Euura leptocephala</td>
+                      <td>128</td>
+                      <td>128</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2867849</td>
+                      <td>Indotaxonus thaianus</td>
+                      <td>268</td>
+                      <td>268</td>
+                      <td>  0.13</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1170492</td>
+                      <td>Athalia liberta</td>
+                      <td>92</td>
+                      <td>92</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1668247</td>
+                      <td>Hymenoptera sp. BOLD:ACI8837</td>
+                      <td>128</td>
+                      <td>128</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>824432</td>
+                      <td>Hymenoptera sp. BOLD:AAB3997</td>
+                      <td>80</td>
+                      <td>80</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>2553024</td>
+                      <td>Hymenoptera sp. ASNUR282-11</td>
+                      <td>64</td>
+                      <td>64</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>7041</td>
+                      <td>Coleoptera</td>
+                      <td>73</td>
+                      <td>6782</td>
+                      <td>  3.17</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>41084</td>
+                      <td>Polyphaga</td>
+                      <td>75</td>
+                      <td>6404</td>
+                      <td>  2.99</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>41088</td>
+                      <td>Cucujiformia</td>
+                      <td>451</td>
+                      <td>5347</td>
+                      <td>  2.50</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2610229</td>
+                      <td>Himatolabus axillaris</td>
+                      <td>2720</td>
+                      <td>2720</td>
+                      <td>  1.27</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>374460</td>
+                      <td>Arrhenodes minutus</td>
+                      <td>102</td>
+                      <td>102</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1896703</td>
+                      <td>Corylophidae sp. BOLD-2016</td>
+                      <td>184</td>
+                      <td>184</td>
+                      <td>  0.09</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1588310</td>
+                      <td>Orthoperus atomus</td>
+                      <td>77</td>
+                      <td>77</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1588290</td>
+                      <td>Olibrus corticalis</td>
+                      <td>171</td>
+                      <td>171</td>
+                      <td>  0.08</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1709600</td>
+                      <td>Atomaria ephippiata</td>
+                      <td>90</td>
+                      <td>90</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1770786</td>
+                      <td>Cephaloon sp. BOLD:AAI3796</td>
+                      <td>416</td>
+                      <td>416</td>
+                      <td>  0.19</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>878071</td>
+                      <td>Longitarsus tabidus</td>
+                      <td>56</td>
+                      <td>56</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>204943</td>
+                      <td>Cryptocephalus</td>
+                      <td>77</td>
+                      <td>78</td>
+                      <td>  0.04</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>2659496</td>
+                      <td>Lamiinae sp. BOLD:AAM7603</td>
+                      <td>135</td>
+                      <td>135</td>
+                      <td>  0.06</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>992610</td>
+                      <td>Hydraena pygmaea</td>
+                      <td>233</td>
+                      <td>233</td>
+                      <td>  0.11</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1845954</td>
+                      <td>Staphylinidae sp. BOLD:AAG4286</td>
+                      <td>78</td>
+                      <td>78</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1709914</td>
+                      <td>Eucnemidae sp. BOLD:ABA6339</td>
+                      <td>59</td>
+                      <td>59</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>295522</td>
+                      <td>Drilus flavescens</td>
+                      <td>62</td>
+                      <td>62</td>
+                      <td>  0.03</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1586974</td>
+                      <td>Agrilus hyperici</td>
+                      <td>111</td>
+                      <td>111</td>
+                      <td>  0.05</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1177201</td>
+                      <td>Nebria rufescens</td>
+                      <td>91</td>
+                      <td>91</td>
+                      <td>  0.04</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>48911</td>
+                      <td>Boreus</td>
+                      <td>3687</td>
+                      <td>3687</td>
+                      <td>  1.72</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1889643</td>
+                      <td>Cicadellidae sp. BOLD-2016</td>
+                      <td>114</td>
+                      <td>114</td>
+                      <td>  0.05</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>197161</td>
+                      <td>Ischnura elegans</td>
+                      <td>227</td>
+                      <td>227</td>
+                      <td>  0.11</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>29019</td>
+                      <td>Penaeus stylirostris</td>
+                      <td>288</td>
+                      <td>288</td>
+                      <td>  0.13</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1569534</td>
+                      <td>Syngonopodium aceris</td>
+                      <td>62</td>
+                      <td>62</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>1646071</td>
+                      <td>Chordeumatida sp. BOLD:ACI7804</td>
+                      <td>64</td>
+                      <td>64</td>
+                      <td>  0.03</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>6854</td>
+                      <td>Arachnida</td>
+                      <td>206</td>
+                      <td>3090</td>
+                      <td>  1.44</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1760111</td>
+                      <td>Nemastomatidae sp. BOLD:ACJ0284</td>
+                      <td>1372</td>
+                      <td>1372</td>
+                      <td>  0.64</td>
+                      <td>True</td>
+                  </tr>
+                  <tr>
+                      <td>6933</td>
+                      <td>Acari</td>
+                      <td>356</td>
+                      <td>1336</td>
+                      <td>  0.62</td>
+                      <td>False</td>
+                  </tr>
+                  <tr>
+                      <td>1687649</td>
+                      <td>Leptus sp. BOLD:ACG7244</td>
+                      <td>384</td>
+                      <td>384</td>
+                      <td>  0.18</td>
+                      <td>False</td>
+                  </tr>
+              </tbody>
+            </table>
+            
+            <script type="text/javascript">
+              $(document).ready( function () {
+                  var table = $('#myTable').DataTable({
+                    "scrollY": "300px",
+                    "paging": false,
+                    "border-bottom":false,
+                    dom: 'frtip',
+                    buttons: ["copy","csv","print"]
+                  });
+                  table.buttons().container().appendTo( $('#tableExportID') );
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+    
+                } );
+            </script>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+              acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                  panel.style.maxHeight = null;
+                } else {
+                  panel.style.maxHeight = panel.scrollHeight*1.2 + "px";
+                } 
+              });
+            }
+    </script>
+
+    <footer class="page-footer">
+      <div class="container-fluid text-right text-md-right">
+        <hr>
+        <div class="row">
+        </div>
+
+      <div class="col-sm-11" style="text-align: right;">
+        ADE3 | <small class="text-muted">Animal diversity and evolution</small> <br><small class="text-muted">GNU General Public License v3.0</small></div>
+
+        <br><br>
+        </p>
+      </div>
+    </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+import os
+from Bio import SeqIO
+from adecoi.utils import histograms
+from adecoi.utils import kraken_parsing
+from adecoi.utils import report_runner as report
+import gzip
+import collections
+import yaml
+
+
+rule all:
+    input:
+        os.path.join(config["output_path"],"updated_config.yaml")
+
+
+def gather_reads(dir_in,barcode,reads_out):
+
+    if not os.path.exists(dir_in):
+        os.mkdir(dir_in)
+
+    fastq_records = []
+
+    total_reads = 0
+    with open(reads_out,"w") as fw:
+        for r,d,f in os.walk(dir_in):
+            for reads_in in f:
+                if reads_in.endswith(".gz") or reads_in.endswith(".gzip"):
+                    with gzip.open(os.path.join(dir_in,reads_in), "rt") as handle:
+                        for record in SeqIO.parse(handle, "fastq"):
+                            total_reads +=1
+                            fastq_records.append(record)
+
+                elif reads_in.endswith(".fastq") or reads_in.endswith(".fq"):
+                    for record in SeqIO.parse(os.path.join(dir_in,reads_in),"fastq"):
+                        total_reads +=1
+                        fastq_records.append(record)
+
+        print(f"Total reads {barcode}:",total_reads)
+        SeqIO.write(fastq_records,fw, "fastq")
+
+rule bin_files:
+    input:
+    params:
+        file_path = os.path.join(config["input_path"], "{barcode}"),
+        barcode = "{barcode}"
+    output:
+        binned = os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq")
+    run:
+        gather_reads(params.file_path,params.barcode,output.binned)
+        
+rule check_empty_files:
+    input:
+        expand(os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq"),barcode=config["barcodes"])
+    output:
+        yaml = os.path.join(config["output_path"],"updated_config.yaml")
+    run:
+        barcode_counts = collections.Counter()
+        for in_file in input:
+            path = in_file.split("/") 
+            barcode = ""
+            for i in path:
+                if i.startswith("barcode"):
+                    barcode = i
+            
+            for record in SeqIO.parse(in_file,"fastq"):
+                barcode_counts[barcode]+=1
+            print(barcode, barcode_counts[barcode])
+        
+        enough_reads = []
+        for barcode in barcode_counts:
+            if barcode_counts[barcode]>50:
+                enough_reads.append(barcode)
+
+        barcode_config = config
+        barcode_config["barcodes"] = enough_reads
+
+        with open(output.yaml, 'w') as fw:
+            yaml.dump(barcode_config, fw) 
+
+
+
+
