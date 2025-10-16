@@ -24,7 +24,7 @@ rule kraken_classify:
     input:
         db=config["kraken_db"],
         binned=os.path.join(config["output_path"],"{barcode}","unfiltered","nanopore_reads.fastq"),
-        taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
+        taxonomy="/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
     output:
         kraken=os.path.join(config["output_path"],"{barcode}","classified","unfiltered.kraken"),
         classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.unfiltered.fastq"),
@@ -84,7 +84,7 @@ rule kraken_classify_filtered:
     input:
         db=config["kraken_db"],
         binned=os.path.join(config["output_path"],"{barcode}","read_length_filtered","filtered_reads.fastq"),
-        taxonomy="/localdisk/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
+        taxonomy="/home/s1680070/seawater_wimp/kraken_data/ADE_working/classified/taxonomy.tab"
     output:
         kraken=os.path.join(config["output_path"],"{barcode}","classified","filtered.kraken"),
         classified_out = os.path.join(config["output_path"],"{barcode}","classified","classified_reads.filtered.fastq"),
