@@ -609,7 +609,7 @@
                             <td>${barcode}</td>
                             <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_${year}/barcode${barcode}/analysis_report.html">sequencing report</a></td>
                             <td><a href="https://uofedinburghade3.github.io/ADE_COI/ADE3_${year}/barcode${barcode}/krona.filtered.html">read classification</a></td>
-                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/tree/main/ADE3_${year}/barcode${barcode}/consensus_sequences">consensus sequences</a></td></tr>
+                            <td><a href="https://github.com/UofEdinburghADE3/ADE_COI/blob/master/ADE3_${year}/barcode${barcode}/consensus_sequences">consensus sequences</a></td></tr>
                     % endfor
                     </tbody>
         </table>
