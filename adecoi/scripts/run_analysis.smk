@@ -56,13 +56,18 @@ rule make_krona:
     output:
         krona=os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.html")
     log: os.path.join(config["output_path"],"{barcode}","classified","krona.unfiltered.log")
-    shell:
-        """
-        ktImportTaxonomy \
-            -q 2 -t 3 {input.kraken} \
-            -o {output.krona} \
-            &> {log} 
-        """
+    run:
+        try:
+            shell("""
+                ktImportTaxonomy \
+                    -q 2 -t 3 {input.kraken} \
+                    -o {output.krona} \
+                    &> {log} 
+            """)
+        except:
+            print("Krona generation failed for barcode {params.barcode}")
+            shell("touch {output.krona}")
+            shell("touch {log}")
 
 rule filter_by_length:
     input:
@@ -121,13 +126,18 @@ rule make_krona_filtered:
     output:
         krona=os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.html")
     log: os.path.join(config["output_path"],"{barcode}","classified","krona.filtered.log")
-    shell:
-        """
-        ktImportTaxonomy \
-            -q 2 -t 3 {input.kraken} \
-            -o {output.krona} \
-            &> {log} 
-        """
+    run:
+        try:
+            shell("""
+                ktImportTaxonomy \
+                    -q 2 -t 3 {input.kraken} \
+                    -o {output.krona} \
+                    &> {log} 
+            """)
+        except:
+            print("Krona generation failed for barcode {params.barcode}")
+            shell("touch {output.krona}")
+            shell("touch {log}")
 
 rule get_taxa_reads:
     input:
