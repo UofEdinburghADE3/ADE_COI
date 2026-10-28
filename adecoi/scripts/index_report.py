@@ -15,9 +15,9 @@ from io import StringIO
 
 config = {}
 config["index_template"] = "/Users/s1680070/repositories/ADE_COI/adecoi/data/index_template.mako"
-config["year"] = "2024"
-config["barcodes_map"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2024/barcodes.csv"
-config["output_path"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2024"
+config["year"] = "2026"
+config["barcodes_map"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2026/barcodes.csv"
+config["output_path"] = "/Users/s1680070/repositories/ADE_COI/ADE3_2026"
 config["controls"] = []
 
 def make_report(report_to_generate,config,data_for_report,year):
