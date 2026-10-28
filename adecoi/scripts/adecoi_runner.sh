@@ -1,14 +1,14 @@
 
 
 snakemake --snakefile /home/s1680070/repositories/ADE_COI/adecoi/scripts/Snakefile \
-            --configfile /home/s1680070/ADE_2025/updated_config.yaml \
+            --configfile /home/s1680070/ADE_2026/updated_config.yaml \
             --cores 10 \
             --forceall \
             --rerun-incomplete \
             --nolock
 
 snakemake --snakefile /home/s1680070/repositories/ADE_COI/adecoi/scripts/run_analysis.smk \
-            --configfile /home/s1680070/ADE_2025/analysis/analysis_config.yaml \
+            --configfile /home/s1680070/ADE_2026/analysis/analysis_config.yaml \
             --cores 10 \
             --forceall \
             --rerun-incomplete \
