@@ -34,15 +34,21 @@ rule kraken_classify:
         classified=os.path.join(config["output_path"],"{barcode}","classified")
     threads:
         2
-    shell:
-        """
-        kraken2 --db {input.db} \
-            --report {output.report} \
-            --classified-out {output.classified_out} \
-            --memory-mapping \
-            {input.binned} \
-            > {output.kraken}
-        """
+    run:
+        try:
+            shell("""
+                kraken2 --db {input.db} \
+                    --report {output.report} \
+                    --classified-out {output.classified_out} \
+                    --memory-mapping \
+                    {input.binned} \
+                    > {output.kraken}
+            """)
+        except:
+            print("Kraken classification failed for barcode {params.barcode}")
+            shell("touch {output.kraken}")
+            shell("touch {output.report}")
+            shell("touch {output.classified_out}")
 
 rule make_krona:
     input:
@@ -93,15 +99,21 @@ rule kraken_classify_filtered:
         barcode="{barcode}",
     threads:
         2
-    shell:
-        """
-        kraken2 --db {input.db} \
-            --report {output.report} \
-            --classified-out {output.classified_out} \
-            --memory-mapping \
-            {input.binned} \
-            > {output.kraken}
-        """
+    run:
+        try:
+            shell("""
+                kraken2 --db {input.db} \
+                    --report {output.report} \
+                    --classified-out {output.classified_out} \
+                    --memory-mapping \
+                    {input.binned} \
+                    > {output.kraken}
+            """)
+        except:
+            print("Kraken classification failed for barcode {params.barcode}")
+            shell("touch {output.kraken}")
+            shell("touch {output.report}")
+            shell("touch {output.classified_out}")
 
 rule make_krona_filtered:
     input:
